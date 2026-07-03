@@ -2117,4 +2117,13 @@
   id: 329
   time: '2026-07-02T18:08:27.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/455
+- author: Atakku
+  changes:
+  - message: 'Pride month is over: removed Carpmosia pride logo'
+    type: Remove
+  - message: Replaced Carpmosia logo with lesbian version
+    type: Add
+  id: 330
+  time: '2026-07-03T23:24:34.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/456
 Order: -1
