@@ -2140,4 +2140,11 @@
   id: 332
   time: '2026-07-05T15:38:40.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/436
+- author: Jakeybobble
+  changes:
+  - message: Added two empty medical belts to the NanoMed Plus inventory.
+    type: Tweak
+  id: 333
+  time: '2026-07-05T15:40:56.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/454
 Order: -1
