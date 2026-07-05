@@ -2147,4 +2147,11 @@
   id: 333
   time: '2026-07-05T15:40:56.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/454
+- author: Atakku
+  changes:
+  - message: Killed end of round music so musicians can play their music without distractions.
+    type: Remove
+  id: 334
+  time: '2026-07-05T15:42:02.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/458
 Order: -1
