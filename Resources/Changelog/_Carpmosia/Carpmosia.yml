@@ -2126,4 +2126,11 @@
   id: 330
   time: '2026-07-03T23:24:34.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/456
+- author: imatsoup
+  changes:
+  - message: Open Traitor Uplinks now lock when their PDA is stripped or dropped.
+    type: Tweak
+  id: 331
+  time: '2026-07-05T10:09:10.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/460
 Order: -1
