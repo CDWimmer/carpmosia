@@ -2176,4 +2176,15 @@
   id: 337
   time: '2026-07-08T20:48:42.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/473
+- author: Atakku
+  changes:
+  - message: Increased warops arrival delay to 20 minutes (from 15)
+    type: Tweak
+  - message: Added a general arrival delay of 30 minutes for non-warops nukies
+    type: Add
+  - message: Lowered minimum operator requirement for war ops from 4 to 3
+    type: Tweak
+  id: 338
+  time: '2026-07-08T23:52:19.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/452
 Order: -1
