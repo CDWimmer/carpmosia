@@ -2208,4 +2208,11 @@
   id: 340
   time: '2026-07-10T22:40:59.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/474
+- author: Kingwawa-1
+  changes:
+  - message: Defibrillator cabinets now recharge defibrillators inside them.
+    type: Add
+  id: 341
+  time: '2026-07-10T22:50:05.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/470
 Order: -1
