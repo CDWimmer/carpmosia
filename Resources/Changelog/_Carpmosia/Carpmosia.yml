@@ -2184,7 +2184,8 @@
     type: Add
   - message: Lowered minimum operator requirement for war ops from 4 to 3
     type: Tweak
-  - message: Corpsman Medicine Bundle waiting time has been decreased from 20 minutes to 18
+  - message: Corpsman Medicine Bundle waiting time has been decreased from 20 minutes
+      to 18
     type: Tweak
   id: 338
   time: '2026-07-08T23:52:19.0000000+00:00'
@@ -2196,4 +2197,15 @@
   id: 339
   time: '2026-07-09T10:34:51.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/445
+- author: imatsoup
+  changes:
+  - message: Added Emergency Lasers, bulky old-gen laser carbines that cargo can buy
+      as a last-resort
+    type: Add
+  - message: Added the Emergency Laser crate to the cargo request computer under the
+      Armory category
+    type: Add
+  id: 340
+  time: '2026-07-10T22:40:59.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/474
 Order: -1
