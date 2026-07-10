@@ -2230,4 +2230,11 @@
   id: 343
   time: '2026-07-10T23:11:24.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/478
+- author: Saver310
+  changes:
+  - message: Added Ace Deathshead metaplush
+    type: Add
+  id: 344
+  time: '2026-07-10T23:42:04.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/435
 Order: -1
