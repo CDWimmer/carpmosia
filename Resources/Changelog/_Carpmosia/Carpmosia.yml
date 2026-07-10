@@ -2215,4 +2215,12 @@
   id: 341
   time: '2026-07-10T22:50:05.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/470
+- author: imatsoup
+  changes:
+  - message: It is now considered a moderate crime to possess unauthorized weaponry
+      (including explosives)
+    type: Tweak
+  id: 342
+  time: '2026-07-10T22:52:27.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/459
 Order: -1
