@@ -1,26 +1,26 @@
 - type: loadoutEffectGroup
-  id: LizardPlushieAxel
+  id: MothPlushieDeathshead
   effects:
   - !type:JobRequirementLoadoutEffect
-    requirement: !type:DepartmentTimeRequirement
-      department: Medical
+    requirement: !type:RoleTimeRequirement
+      role: JobBartender
       time: 20h
 
 - type: loadout
-  id: LizardPlushieAxel
+  id: MothPlushieDeathshead
   effects:
   - !type:GroupLoadoutEffect
-    proto: LizardPlushieAxel
+    proto: MothPlushieDeathshead
   storage:
     back:
-    - PlushieLizardAxel
+    - PlushieMothDeathshead
   groupBy: "metaplush"
 
 - type: loadout
-  id: HatPlushieAxel
+  id: HatPlushieDeathshead
   effects:
   - !type:GroupLoadoutEffect
-    proto: LizardPlushieAxel
+    proto: MothPlushieDeathshead
   equipment:
-    head: PlushieLizardAxel
+    head: PlushieMothDeathshead
   groupBy: "metaplush"
