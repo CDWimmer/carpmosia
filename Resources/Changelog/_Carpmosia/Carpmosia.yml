@@ -2223,4 +2223,11 @@
   id: 342
   time: '2026-07-10T22:52:27.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/459
+- author: Atakku
+  changes:
+  - message: Diagonal walls and window sprites have been drastically improved.
+    type: Tweak
+  id: 343
+  time: '2026-07-10T23:11:24.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/478
 Order: -1
