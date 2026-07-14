@@ -2262,4 +2262,14 @@
   id: 347
   time: '2026-07-14T02:07:36.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/483
+- author: Atakku
+  changes:
+  - message: 'Added a new terminal station: "Donk Co. Rest Stop"'
+    type: Add
+  - message: CentComm has been replaced with a randomly selected neutral ground terminal
+      station.
+    type: Tweak
+  id: 348
+  time: '2026-07-14T02:39:16.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/497
 Order: -1
