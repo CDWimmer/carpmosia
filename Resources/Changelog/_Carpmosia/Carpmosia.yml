@@ -2272,4 +2272,11 @@
   id: 348
   time: '2026-07-14T02:39:16.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/497
+- author: Cr0w-alt-f4
+  changes:
+  - message: more books
+    type: Add
+  id: 349
+  time: '2026-07-14T16:24:32.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/346
 Order: -1
