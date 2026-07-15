@@ -2279,4 +2279,14 @@
   id: 349
   time: '2026-07-14T16:24:32.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/346
+- author: Jakeybobble
+  changes:
+  - message: Fixed cursed axolotl plushie in-hand sprites and being unable to inject
+      solutions into it
+    type: Fix
+  - message: Fixed screaming lizard plushie in-hand sprites
+    type: Fix
+  id: 350
+  time: '2026-07-15T16:23:03.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/505
 Order: -1
