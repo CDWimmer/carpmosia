@@ -6,7 +6,7 @@
   components:
   - type: Sprite
     sprite: _Carpmosia/Objects/Fun/Plushies/screams.rsi
-  - type: Clothing
+  - type: Item
     sprite: _Carpmosia/Objects/Fun/Plushies/screams.rsi
   - type: EmitSoundOnUse
     sound: &PlushieLizardScreamsSound
@@ -28,6 +28,8 @@
     transferAmount: 10
   - type: MeleeWeapon
     soundHit: *PlushieLizardScreamsSound
+  - type: Clothing
+    sprite: _Carpmosia/Objects/Fun/Plushies/screams.rsi
   - type: Explosive
     canCreateVacuum: false
     deleteAfterExplosion: false
@@ -96,7 +98,7 @@
     - state: fill-1
       map: ["enum.SolutionContainerLayers.Fill"]
       visible: false
-  - type: Clothing
+  - type: Item
     sprite: _Carpmosia/Objects/Fun/Plushies/axel.rsi
   - type: EmitSoundOnUse
     sound: &PlushieLizardAxelSound
@@ -118,30 +120,31 @@
     transferAmount: 10
   - type: MeleeWeapon
     soundHit: *PlushieLizardAxelSound
+  - type: Clothing
+    sprite: _Carpmosia/Objects/Fun/Plushies/axel.rsi
   - type: Extractable
-    juiceSolution:
-      reagents:
-      - ReagentId: Blood
-        Quantity: 30
+    grindableSolutionName: food
+    juiceSolution: null
   - type: Solution
     solution:
+      maxVol: 30
       reagents:
       - ReagentId: Fiber
         Quantity: 10
       - ReagentId: Blood
         Quantity: 10
   - type: MixableSolution
-    solution: coloring
+    solution: food
   - type: ExaminableSolution
-    solution: coloring
+    solution: food
     exactVolume: true
   - type: DrawableSolution
-    solution: coloring
+    solution: food
   - type: InjectableSolution
-    solution: coloring
+    solution: food
   - type: Appearance
   - type: SolutionContainerVisuals
-    solutionName: coloring
+    solutionName: food
     maxFillLevels: 4
     fillBaseName: fill-
     inHandsMaxFillLevels: 4
