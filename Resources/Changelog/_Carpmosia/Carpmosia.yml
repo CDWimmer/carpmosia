@@ -2299,4 +2299,11 @@
   id: 351
   time: '2026-07-16T02:26:22.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/512
+- author: Atakku
+  changes:
+  - message: Removed unnecessary beacons from Donk Co Rest Stop
+    type: Fix
+  id: 352
+  time: '2026-07-16T02:39:29.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/513
 Order: -1
