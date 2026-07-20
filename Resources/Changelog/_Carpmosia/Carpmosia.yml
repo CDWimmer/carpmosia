@@ -2327,4 +2327,16 @@
   id: 355
   time: '2026-07-20T15:08:20.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/518
+- author: Atakku
+  changes:
+  - message: AI Holopad customization menu has been tweaked
+    type: Tweak
+  - message: Mothroach, Weh and Diona nympth AI forms have been changed to use the
+      real Mothroach, Lizard Plushie, and Diona nymth sprites
+    type: Tweak
+  - message: 'Added a new AI Form: Clown lizard plushie'
+    type: Add
+  id: 356
+  time: '2026-07-20T17:23:29.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/492
 Order: -1
