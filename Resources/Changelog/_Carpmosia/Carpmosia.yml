@@ -2348,4 +2348,19 @@
   id: 357
   time: '2026-07-21T10:43:13.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/495
+- author: Jakeybobble
+  changes:
+  - message: Added the Kitti, a bipedal feline ancestor.
+    type: Add
+  - message: Added kitti cube boxes to the cargo market.
+    type: Add
+  - message: Added a recipe for kitti cubes to the biogenerator.
+    type: Add
+  - message: Changed variant cube box to include kitti cubes.
+    type: Tweak
+  - message: Added kitti to syndicate reinforcement radio.
+    type: Add
+  id: 358
+  time: '2026-07-21T14:31:09.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/467
 Order: -1
