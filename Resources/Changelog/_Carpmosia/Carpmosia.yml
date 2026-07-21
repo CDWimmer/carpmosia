@@ -2339,4 +2339,13 @@
   id: 356
   time: '2026-07-20T17:23:29.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/492
+- author: Atakku
+  changes:
+  - message: Lobby time has been shortened from 300 seconds to 150 seconds
+    type: Tweak
+  - message: End of round has been extended from 300 seconds to 450 seconds
+    type: Tweak
+  id: 357
+  time: '2026-07-21T10:43:13.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/495
 Order: -1
