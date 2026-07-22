@@ -2363,4 +2363,22 @@
   id: 358
   time: '2026-07-21T14:31:09.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/467
+- author: Atakku
+  changes:
+  - message: Map vote has been changed to be exclusively automatic at the start of
+      each round, unless started by an Admin.
+    type: Tweak
+  id: 359
+  time: '2026-07-22T03:08:25.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/494
+- author: Atakku
+  changes:
+  - message: Ghosts now have a button to return to lobby early, which unlocks as soon
+      as the evac shuttle arrives.
+    type: Add
+  - message: Late-joining is disabled when the evac shuttle arrives.
+    type: Tweak
+  id: 360
+  time: '2026-07-22T03:08:36.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/482
 Order: -1
