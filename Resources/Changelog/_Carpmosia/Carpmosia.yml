@@ -2381,4 +2381,19 @@
   id: 360
   time: '2026-07-22T03:08:36.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/482
+- author: Atakku
+  changes:
+  - message: Evac pods now have a much larger randomized FTL delay
+    type: Tweak
+  - message: Evac pods leave the FTL space at a randomized delay, before the Evac
+      shuttle arrives to the Terminal
+    type: Tweak
+  - message: Evac pods no longer FTL to the Terminal, instead they land at a random
+      spot on the Arrivals planet.
+    type: Tweak
+  - message: Arrivals cloud radius has been increased to account for the Evac pods.
+    type: Tweak
+  id: 361
+  time: '2026-07-22T08:31:58.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/461
 Order: -1
