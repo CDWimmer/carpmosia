@@ -80,7 +80,7 @@ public sealed partial class StationAiCustomizationMenu : FancyWindow
                 if (!protoManager.Resolve(protoId, out var prototype))
                     continue;
 
-                var entry = new StationAiCustomizationEntryContainer(groupPrototype, prototype, buttonGroup, menu);
+                var entry = new StationAiCustomizationEntryContainer(groupPrototype, prototype, buttonGroup, menu, protoManager); // Carpmosia-edit - Better AI Hologram preview
                 AddChild(entry);
 
                 if (prototype == selectedPrototype)
@@ -95,8 +95,6 @@ public sealed partial class StationAiCustomizationMenu : FancyWindow
         public Button SelectButton;
 
         // Carpmosia-start - Better AI Hologram preview
-        [Dependency] private IPrototypeManager _protoManager = default!;
-
         private static readonly ProtoId<ShaderPrototype> HologramShader = "Hologram";
         private static readonly Vector3 ShaderColor1;
         private static readonly Vector3 ShaderColor2;
@@ -114,7 +112,8 @@ public sealed partial class StationAiCustomizationMenu : FancyWindow
             (StationAiCustomizationGroupPrototype groupPrototype,
             StationAiCustomizationPrototype prototype,
             ButtonGroup buttonGroup,
-            StationAiCustomizationMenu menu)
+            StationAiCustomizationMenu menu,
+            IPrototypeManager protoManager) // Carpmosia-edit - Better AI Hologram preview
         {
             ProtoId = prototype;
 
@@ -188,7 +187,7 @@ public sealed partial class StationAiCustomizationMenu : FancyWindow
             // Carpmosia-start - Better AI Hologram preview
             if (prototype.PreviewKey == "Hologram")
             {
-                var instance = _protoManager.Index(HologramShader).InstanceUnique();
+                var instance = protoManager.Index(HologramShader).InstanceUnique();
                 instance.SetParameter("color1", ShaderColor1);
                 instance.SetParameter("color2", ShaderColor2);
                 instance.SetParameter("alpha", 0.9f);
