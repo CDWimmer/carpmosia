@@ -2396,4 +2396,11 @@
   id: 361
   time: '2026-07-22T08:31:58.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/461
+- author: korczoczek
+  changes:
+  - message: Janimaid uniforms are now available in the uniform printer
+    type: Tweak
+  id: 362
+  time: '2026-07-24T23:45:33.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/410
 Order: -1
