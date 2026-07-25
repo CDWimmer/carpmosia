@@ -2449,4 +2449,12 @@
   id: 367
   time: '2026-07-25T10:31:10.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/504
+- author: Atakku
+  changes:
+  - message: Most of the ghost warp points are now prefixed with the respective station
+      name
+    type: Add
+  id: 368
+  time: '2026-07-25T20:39:24.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/516
 Order: -1
