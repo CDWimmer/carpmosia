@@ -2428,4 +2428,11 @@
   id: 364
   time: '2026-07-25T00:24:13.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/526
+- author: Atakku
+  changes:
+  - message: Added 8 colored variants of regular and office paper!
+    type: Add
+  id: 365
+  time: '2026-07-25T01:24:05.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/493
 Order: -1
