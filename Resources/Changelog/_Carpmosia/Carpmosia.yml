@@ -2442,4 +2442,11 @@
   id: 366
   time: '2026-07-25T01:24:05.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/493
+- author: luarequire
+  changes:
+  - message: Added a new song 'metro station' by 'foxiewoxie / sleep4winter'
+    type: Add
+  id: 367
+  time: '2026-07-25T10:31:10.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/504
 Order: -1
