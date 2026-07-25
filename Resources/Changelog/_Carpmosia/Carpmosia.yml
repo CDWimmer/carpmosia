@@ -2457,4 +2457,12 @@
   id: 368
   time: '2026-07-25T20:39:24.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/516
+- author: Atakku
+  changes:
+  - message: The alternative emote menu is now enabled by default. You can revert
+      to the old menu in UI options.
+    type: Tweak
+  id: 369
+  time: '2026-07-25T20:52:51.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/531
 Order: -1
