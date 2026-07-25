@@ -2419,4 +2419,13 @@
   id: 363
   time: '2026-07-25T00:06:49.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/524
+- author: Atakku
+  changes:
+  - message: Lobby duration has been changed back from 150 seconds to 300.
+    type: Tweak
+  - message: Map vote duration has been doubled from 90 seconds to 180.
+    type: Tweak
+  id: 364
+  time: '2026-07-25T00:24:13.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/526
 Order: -1
