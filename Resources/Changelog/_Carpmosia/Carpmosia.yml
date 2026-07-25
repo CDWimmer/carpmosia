@@ -2465,4 +2465,11 @@
   id: 369
   time: '2026-07-25T20:52:51.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/531
+- author: Atakku
+  changes:
+  - message: Nuking CC/Terminal is no longer counted as a nukeops major win.
+    type: Remove
+  id: 370
+  time: '2026-07-25T20:58:01.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/532
 Order: -1
