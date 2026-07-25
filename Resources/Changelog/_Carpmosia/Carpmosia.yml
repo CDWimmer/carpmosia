@@ -2403,4 +2403,20 @@
   id: 362
   time: '2026-07-24T23:45:33.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/410
+- author: Atakku
+  changes:
+  - message: Janitorial maid uniform has been renamed to Service maid uniform, and
+      fully replaced it in loadouts as well.
+    type: Tweak
+  - message: Previous service maid uniform has been removed.
+    type: Remove
+  - message: Janitorial maid uniform with miniskirt has been renamed to Service maid
+      uniform with miniskirt.
+    type: Tweak
+  - message: Added Service maid uniform with miniskirt to the loadout of Janitor,
+      Bartender, Chef and Service worker
+    type: Add
+  id: 363
+  time: '2026-07-25T00:06:49.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/524
 Order: -1
