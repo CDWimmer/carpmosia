@@ -2472,4 +2472,11 @@
   id: 370
   time: '2026-07-25T20:58:01.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/532
+- author: Atakku
+  changes:
+  - message: Added a new lobby art, "A day in Sci" by spaceworm12
+    type: Add
+  id: 371
+  time: '2026-07-26T10:17:18.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/529
 Order: -1
