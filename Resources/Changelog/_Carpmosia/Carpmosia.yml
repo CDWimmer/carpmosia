@@ -2520,4 +2520,11 @@
   id: 376
   time: '2026-07-30T01:44:33.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/542
+- author: Atakku
+  changes:
+  - message: Job priorities have been subdivided into 6 total selections.
+    type: Tweak
+  id: 377
+  time: '2026-07-30T01:46:43.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/543
 Order: -1
