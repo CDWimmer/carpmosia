@@ -2534,4 +2534,15 @@
   id: 378
   time: '2026-07-30T21:18:24.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/545
+- author: imatsoup
+  changes:
+  - message: The Singularity has been changed to move much more slowly at all levels.
+    type: Tweak
+  - message: The Tesla has new behavior. On breaking containment, the Tesla will now
+      seek out the nearest SMES. On consuming the SMES, the Tesla will undergo a rupture,
+      splitting into timed-life mini-balls
+    type: Tweak
+  id: 379
+  time: '2026-08-01T11:26:35.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/408
 Order: -1
