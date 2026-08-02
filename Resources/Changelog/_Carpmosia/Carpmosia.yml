@@ -2559,4 +2559,11 @@
   id: 381
   time: '2026-08-02T23:26:53.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/468
+- author: Atakku
+  changes:
+  - message: Extended AFK timer to 30 minutes, extended AFK prompt to 2.5 minutes
+    type: Tweak
+  id: 382
+  time: '2026-08-02T23:38:01.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/551
 Order: -1
