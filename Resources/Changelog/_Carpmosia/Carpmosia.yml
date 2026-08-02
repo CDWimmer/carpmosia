@@ -2552,4 +2552,11 @@
   id: 380
   time: '2026-08-02T00:49:08.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/547
+- author: Atakku
+  changes:
+  - message: Late join menu now orders stations horizontally
+    type: Tweak
+  id: 381
+  time: '2026-08-02T23:26:53.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/468
 Order: -1
