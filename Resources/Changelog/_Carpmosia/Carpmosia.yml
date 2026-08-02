@@ -2545,4 +2545,11 @@
   id: 379
   time: '2026-08-01T11:26:35.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/408
+- author: Atakku
+  changes:
+  - message: Added a notice about removed job priority
+    type: Tweak
+  id: 380
+  time: '2026-08-02T00:49:08.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/547
 Order: -1
