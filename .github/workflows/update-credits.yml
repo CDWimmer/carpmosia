@@ -21,7 +21,7 @@ jobs:
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        run: Tools/dump_github_contributors.ps1 > Resources/Credits/GitHub.txt
+        run: Tools/_Carpmosia/dump_contribs.ps1 > Resources/Credits/Carpmosia.txt
 
       # TODO
       #- name: Get this week's Patreons
@@ -50,5 +50,5 @@ jobs:
           commit-message: Update Credits
           title: Update Credits
           body: This is an automated Pull Request. This PR updates the github contributors in the credits section.
-          author: AkuBot <atakkudev+github.akubot@gmail.com>
+          author: CarpBot <atakkudev+github.carpbot@gmail.com>
           branch: automated/credits-${{env.NOW}}

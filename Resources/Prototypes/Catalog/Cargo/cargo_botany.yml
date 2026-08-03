@@ -41,8 +41,8 @@
 - type: cargoProduct
   id: BulkPlantBGone
   icon:
-    sprite: Objects/Specific/Chemistry/jug.rsi
-    state: jug
+    sprite: _Carpmosia/Objects/Specific/Chemistry/jug.rsi # Carpmosia-edit - chem resprite
+    state: icon_empty
   product: CratePlantBGone
   cost: 750
   category: cargoproduct-category-name-hydroponics

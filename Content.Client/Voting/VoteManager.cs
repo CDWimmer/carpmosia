@@ -15,6 +15,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Sources;
 using Robust.Shared.ContentPack;
+using Robust.Shared.Prototypes; // Carpmosia-edit - Better map vote
 
 
 namespace Content.Client.Voting
@@ -32,14 +33,14 @@ namespace Content.Client.Voting
         event Action CanCallStandardVotesChanged;
     }
 
-    public sealed class VoteManager : IVoteManager
+    public sealed partial class VoteManager : IVoteManager
     {
-        [Dependency] private readonly IAudioManager _audio = default!;
-        [Dependency] private readonly IBaseClient _client = default!;
-        [Dependency] private readonly IClientConsoleHost _console = default!;
-        [Dependency] private readonly IClientNetManager _netManager = default!;
-        [Dependency] private readonly IGameTiming _gameTiming = default!;
-        [Dependency] private readonly IResourceCache _res = default!;
+        [Dependency] private IAudioManager _audio = default!;
+        [Dependency] private IBaseClient _client = default!;
+        [Dependency] private IClientConsoleHost _console = default!;
+        [Dependency] private IClientNetManager _netManager = default!;
+        [Dependency] private IGameTiming _gameTiming = default!;
+        [Dependency] private IResourceCache _res = default!;
 
         private readonly Dictionary<StandardVoteType, TimeSpan> _standardVoteTimeouts = new();
         private readonly Dictionary<int, ActiveVote> _votes = new();
@@ -154,7 +155,7 @@ namespace Content.Client.Voting
                 var vote = new ActiveVote(voteId)
                 {
                     Entries = message.Options
-                        .Select(c => new VoteEntry(c.name))
+                        .Select(c => new VoteEntry(c.name, c.icon, c.preview)) // Carpmosia-edit - Better map vote
                         .ToArray()
                 };
 
@@ -258,11 +259,15 @@ namespace Content.Client.Voting
         public sealed class VoteEntry
         {
             public string Text { get; }
+            public string? Icon { get; } // Carpmosia-edit - Better map vote
+            public EntProtoId? Preview { get; } // Carpmosia-edit - Better map vote
             public int Votes { get; set; }
 
-            public VoteEntry(string text)
+            public VoteEntry(string text, string? icon, EntProtoId? preview) // Carpmosia-edit - Better map vote
             {
                 Text = text;
+                Icon = icon; // Carpmosia-edit - Better map vote
+                Preview = preview; // Carpmosia-edit - Better map vote
             }
         }
     }

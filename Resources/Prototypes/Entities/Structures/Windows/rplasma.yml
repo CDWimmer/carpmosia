@@ -5,25 +5,17 @@
   components:
   - type: Sprite
     drawdepth: WallTops
-    sprite: Structures/Windows/reinforced_plasma_window.rsi
+    sprite: _Carpmosia/Structures/Windows/plasma_reinforced.rsi # Carpmosia-edit - Window resprite
   - type: Icon
-    sprite: Structures/Windows/reinforced_plasma_window.rsi
+    sprite: _Carpmosia/Structures/Windows/plasma_reinforced.rsi # Carpmosia-edit - Window resprite
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: RGlass
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: RadiationBlocker
     resistance: 4
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 300
-      behaviors: #excess damage, don't spawn entities.
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-      - !type:PlaySoundBehavior
-        sound:
-          collection: WindowShatter
     - trigger:
         !type:DamageTrigger
         damage: 150
@@ -42,7 +34,8 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: IconSmooth
-    base: rpwindow
+    key: windows_plasma # Carpmosia-edit - Wall resprite
+    base: full # Carpmosia-edit - Window resprite
   - type: Construction
     graph: Window
     node: reinforcedPlasmaWindow
@@ -67,11 +60,11 @@
     - Window
   components:
   - type: Sprite
-    sprite: Structures/Windows/directional.rsi
-    state: plasma_reinforced_window
+    sprite: _Carpmosia/Structures/Windows/plasma_reinforced.rsi # Carpmosia-edit - Window resprite
+    state: directional # Carpmosia-edit - Window resprite
   - type: Icon
-    sprite: Structures/Windows/directional.rsi
-    state: plasma_reinforced_window
+    sprite: _Carpmosia/Structures/Windows/plasma_reinforced.rsi # Carpmosia-edit - Window resprite
+    state: directional # Carpmosia-edit - Window resprite
   - type: Construction
     graph: WindowDirectional
     node: plasmaReinforcedWindowDirectional
@@ -88,12 +81,6 @@
     resistance: 2
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 150
-      behaviors: #excess damage, don't spawn entities.
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
     - trigger:
         !type:DamageTrigger
         damage: 75
@@ -125,19 +112,19 @@
   components:
   - type: Sprite
     drawdepth: WallTops
-    sprite: Structures/Windows/reinforced_plasma_diagonal.rsi
-    state: state0
+    sprite: _Carpmosia/Structures/Windows/plasma_reinforced.rsi # Carpmosia-edit - Window resprite
+    state: diagonal0 # Carpmosia-edit - Window resprite
   - type: Tag
     tags:
     - Diagonal
     - Window
   - type: IconSmooth
     mode: Diagonal
-    key: windows
-    base: state
+    key: windows_plasma # Carpmosia-edit - Wall resprite
+    base: diagonal # Carpmosia-edit - Window resprite
   - type: Icon
-    sprite: Structures/Windows/reinforced_plasma_diagonal.rsi
-    state: state0
+    sprite: _Carpmosia/Structures/Windows/plasma_reinforced.rsi # Carpmosia-edit - Window resprite
+    state: diagonal0 # Carpmosia-edit - Window resprite
   - type: Fixtures
     fixtures:
       fix1:

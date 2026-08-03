@@ -1,0 +1,37 @@
+- type: entity
+  parent: ClothingEyesGlassesMeson
+  id: ClothingEyesGlassesBrass
+  name: brass goggles
+  description: Embedded in brass casing, these goggles add a steampunk feeling, while still protecting from eye damage of all types.
+  components:
+  - type: Sprite
+    sprite: _Carpmosia/Clothing/Eyes/Glasses/brassgoggles.rsi
+  - type: Clothing
+    sprite: _Carpmosia/Clothing/Eyes/Glasses/brassgoggles.rsi
+  - type: Construction
+    graph: BrassGoggles
+    node: brassGoggles
+  - type: Tag
+    tags:
+    - PetWearable
+    - WhitelistChameleon
+
+- type: entity
+  parent: [ClothingEyesGlassesMeson, ClothingEyesHudDiagnostic]
+  id: ClothingEyesGlassesMesonDiagnostic
+  name: diagnostic goggles
+  description: Orange-tinted engineering goggles with an intergrated diagnostics hud.
+  components:
+  - type: Sprite
+    sprite: _Carpmosia/Clothing/Eyes/Glasses/mesondiag.rsi
+  - type: Clothing
+    sprite: _Carpmosia/Clothing/Eyes/Glasses/mesondiag.rsi
+  - type: StaticPrice
+    price: 30
+  - type: Construction
+    graph: MesonDiagnostic
+    node: mesonDiagnostic
+  - type: Tag
+    tags:
+    - PetWearable
+    - WhitelistChameleon

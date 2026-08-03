@@ -16,18 +16,24 @@ namespace Content.Server.Holiday.Christmas;
 /// <summary>
 /// This handles granting players their gift.
 /// </summary>
-public sealed class RandomGiftSystem : EntitySystem
+public sealed partial class RandomGiftSystem : EntitySystem
 {
-    [Dependency] private readonly AudioSystem _audio = default!;
-    [Dependency] private readonly HandsSystem _hands = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private HandsSystem _hands = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private readonly List<string> _possibleGiftsSafe = new();
     private readonly List<string> _possibleGiftsUnsafe = new();
+    // Carpmosia-start - Carpmas Presents
+    private readonly List<string> _possibleGiftsCurated = new();
+    private readonly List<string> _blacklist = ["Throngler", "WeaponMinigun", "NuclearGrenade",
+     "CartridgeMinigun", "NukeCodePaper", "NukeCodePaperStation", "TraitorCodePaper", "AllTraitorCodesPaper",
+     "BoxFolderNuclearCodes", "ComputerSensorMonitoring", "SensorConsoleCircuitboard"];
+    // Carpmosia-end - Carpmas Presents
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -78,6 +84,10 @@ public sealed class RandomGiftSystem : EntitySystem
     {
         if (component.InsaneMode)
             component.SelectedEntity = _random.Pick(_possibleGiftsUnsafe);
+        // Carpmosia-start - Carpmas Presents
+        else if (component.CuratedMode)
+            component.SelectedEntity = _random.Pick(_possibleGiftsCurated);
+        // Carpmosia-end - Carpmas Presents
         else
             component.SelectedEntity = _random.Pick(_possibleGiftsSafe);
     }
@@ -107,6 +117,13 @@ public sealed class RandomGiftSystem : EntitySystem
                 continue;
 
             _possibleGiftsSafe.Add(proto.ID);
+
+            // Carpmosia-start - Carpmas Presents
+            if (_blacklist.Contains(proto.ID) || proto.EditorSuffix != null && proto.EditorSuffix.Contains("DEBUG"))
+                continue;
+
+            _possibleGiftsCurated.Add(proto.ID);
+            // Carpmosia-end - Carpmas Presents
         }
     }
 }

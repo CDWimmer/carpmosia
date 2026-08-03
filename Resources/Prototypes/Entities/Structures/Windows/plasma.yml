@@ -5,23 +5,15 @@
   components:
   - type: Sprite
     drawdepth: WallTops
-    sprite: Structures/Windows/plasma_window.rsi
+    sprite: _Carpmosia/Structures/Windows/plasma.rsi # Carpmosia-edit - Window resprite
   - type: Icon
-    sprite: Structures/Windows/plasma_window.rsi
+    sprite: _Carpmosia/Structures/Windows/plasma.rsi # Carpmosia-edit - Window resprite
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Glass
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 150
-      behaviors:
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-      - !type:PlaySoundBehavior
-        sound:
-          collection: WindowShatter
     - trigger:
         !type:DamageTrigger
         damage: 75
@@ -37,7 +29,8 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: IconSmooth
-    base: pwindow
+    key: windows_plasma # Carpmosia-edit - Wall resprite
+    base: full # Carpmosia-edit - Window resprite
   - type: Construction
     graph: Window
     node: plasmaWindow
@@ -64,11 +57,11 @@
     - Window
   components:
   - type: Sprite
-    sprite: Structures/Windows/directional.rsi
-    state: plasma_window
+    sprite: _Carpmosia/Structures/Windows/plasma.rsi # Carpmosia-edit - Window resprite
+    state: directional # Carpmosia-edit - Window resprite
   - type: Icon
-    sprite: Structures/Windows/directional.rsi
-    state: plasma_window
+    sprite: _Carpmosia/Structures/Windows/plasma.rsi # Carpmosia-edit - Window resprite
+    state: directional # Carpmosia-edit - Window resprite
   - type: Construction
     graph: WindowDirectional
     node: plasmaWindowDirectional
@@ -81,15 +74,6 @@
       sprite: Structures/Windows/cracks_directional.rsi
   - type: Destructible
     thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 75
-      behaviors:
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-      - !type:PlaySoundBehavior
-        sound:
-          collection: WindowShatter
     - trigger:
         !type:DamageTrigger
         damage: 37
@@ -120,19 +104,19 @@
   components:
   - type: Sprite
     drawdepth: WallTops
-    sprite: Structures/Windows/plasma_diagonal.rsi
-    state: state0
+    sprite: _Carpmosia/Structures/Windows/plasma.rsi # Carpmosia-edit - Window resprite
+    state: diagonal0 # Carpmosia-edit - Window resprite
   - type: Tag
     tags:
     - Diagonal
     - Window
   - type: IconSmooth
     mode: Diagonal
-    key: windows
-    base: state
+    key: windows_plasma # Carpmosia-edit - Wall resprite
+    base: diagonal # Carpmosia-edit - Window resprite
   - type: Icon
-    sprite: Structures/Windows/plasma_diagonal.rsi
-    state: state0
+    sprite: _Carpmosia/Structures/Windows/plasma.rsi # Carpmosia-edit - Window resprite
+    state: diagonal0 # Carpmosia-edit - Window resprite
   - type: Fixtures
     fixtures:
       fix1:

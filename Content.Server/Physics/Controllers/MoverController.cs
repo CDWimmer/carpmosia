@@ -1,39 +1,140 @@
+using System.Diagnostics;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
-using Content.Shared.Friction;
+using Content.Server.PID; // Carpmosia-edit - rotate shuttle along movement vector
 using Content.Shared.Movement.Components;
+using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Prometheus;
-using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
-using DroneConsoleComponent = Content.Server.Shuttles.DroneConsoleComponent;
 using DependencyAttribute = Robust.Shared.IoC.DependencyAttribute;
-using Robust.Shared.Map.Components;
+using DroneConsoleComponent = Content.Server.Shuttles.DroneConsoleComponent;
 
 namespace Content.Server.Physics.Controllers;
 
-public sealed class MoverController : SharedMoverController
+public sealed partial class MoverController : SharedMoverController
 {
     private static readonly Gauge ActiveMoverGauge = Metrics.CreateGauge(
         "physics_active_mover_count",
-        "Active amount of InputMovers being processed by MoverController");
+        "Amount of ActiveInputMovers being processed by MoverController");
 
-    [Dependency] private readonly ThrusterSystem _thruster = default!;
-    [Dependency] private readonly SharedTransformSystem _xformSystem = default!;
+    [Dependency] private ThrusterSystem _thruster = default!;
+
+    [Dependency] private EntityQuery<ActiveInputMoverComponent> _activeQuery = default!;
+    [Dependency] private EntityQuery<DroneConsoleComponent> _droneQuery = default!;
+    [Dependency] private EntityQuery<ShuttleComponent> _shuttleQuery = default!;
 
     private Dictionary<EntityUid, (ShuttleComponent, List<(EntityUid, PilotComponent, InputMoverComponent, TransformComponent)>)> _shuttlePilots = new();
+
+    // Not needed for persistence; just used to save an alloc
+    private readonly HashSet<EntityUid> _seenMovers = [];
+    private readonly HashSet<EntityUid> _seenRelayMovers = [];
+    private readonly List<Entity<InputMoverComponent>> _moversToUpdate = [];
 
     public override void Initialize()
     {
         base.Initialize();
+
+        SubscribeLocalEvent<ActiveInputMoverComponent, EntityPausedEvent>(OnEntityPaused);
+        SubscribeLocalEvent<InputMoverComponent, EntityUnpausedEvent>(OnEntityUnpaused);
+
         SubscribeLocalEvent<RelayInputMoverComponent, PlayerAttachedEvent>(OnRelayPlayerAttached);
         SubscribeLocalEvent<RelayInputMoverComponent, PlayerDetachedEvent>(OnRelayPlayerDetached);
         SubscribeLocalEvent<InputMoverComponent, PlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<InputMoverComponent, PlayerDetachedEvent>(OnPlayerDetached);
+    }
+
+    private void OnEntityPaused(Entity<ActiveInputMoverComponent> ent, ref EntityPausedEvent args)
+    {
+        // Become unactive [sic] if we don't have PhysicsComp.IgnorePaused
+        if (PhysicsQuery.TryComp(ent, out var phys) && phys.IgnorePaused)
+            return;
+        RemCompDeferred<ActiveInputMoverComponent>(ent);
+    }
+
+    private void OnEntityUnpaused(Entity<InputMoverComponent> ent, ref EntityUnpausedEvent args)
+    {
+        UpdateMoverStatus((ent, ent.Comp));
+    }
+
+    protected override void OnInputMoverCanMoveUpdated(Entity<InputMoverComponent> ent, ref CanMoveUpdatedEvent args)
+    {
+        base.OnInputMoverCanMoveUpdated(ent, ref args);
+
+        if (!args.CanMove)
+        {
+            // Remove from active mover query when entity cannot move
+            RemCompDeferred<ActiveInputMoverComponent>(ent);
+            return;
+        }
+
+        UpdateMoverStatus((ent, ent.Comp));
+    }
+
+    protected override void OnMoverStartup(Entity<InputMoverComponent> ent, ref ComponentStartup args)
+    {
+        base.OnMoverStartup(ent, ref args);
+        UpdateMoverStatus((ent, ent.Comp));
+    }
+
+    protected override void OnTargetRelayShutdown(Entity<MovementRelayTargetComponent> ent, ref ComponentShutdown args)
+    {
+        base.OnTargetRelayShutdown(ent, ref args);
+        UpdateMoverStatus((ent, null, ent.Comp));
+    }
+
+    protected override void UpdateMoverStatus(Entity<InputMoverComponent?, MovementRelayTargetComponent?> ent)
+    {
+        // Track that we aren't in a loop of movement relayers
+        _seenMovers.Clear();
+        while (true)
+        {
+            if (!MoverQuery.Resolve(ent, ref ent.Comp1, logMissing: false))
+            {
+                RemCompDeferred<ActiveInputMoverComponent>(ent);
+                break;
+            }
+
+            var meta = MetaData(ent);
+            if (Terminating(ent, meta))
+                break;
+
+            ActiveInputMoverComponent? activeMover = null;
+            if (!meta.EntityPaused
+                || PhysicsQuery.TryComp(ent, out var phys) && phys.IgnorePaused)
+                activeMover = EnsureComp<ActiveInputMoverComponent>(ent);
+
+            // If we're a relay target, make sure our drivers are InputMovers
+            if (RelayTargetQuery.Resolve(ent, ref ent.Comp2, logMissing: false)
+                // In case we're called from ComponentShutdown:
+                && ent.Comp2.LifeStage <= ComponentLifeStage.Running
+                && Exists(ent.Comp2.Source)
+                && !_seenMovers.Contains(ent.Comp2.Source))
+            {
+                if (ent.Comp2.Source == ent.Owner)
+                {
+                    Log.Error($"Entity {ToPrettyString(ent)} is attempting to relay movement to itself!");
+                    break;
+                }
+
+                if (activeMover is not null)
+                    activeMover.RelayedFrom = ent.Comp2.Source;
+
+                ent = ent.Comp2.Source;
+                _seenMovers.Add(ent);
+                continue;
+            }
+
+            // No longer a well-defined relay target
+            if (activeMover is not null)
+                activeMover.RelayedFrom = null;
+
+            break;
+        }
     }
 
     private void OnRelayPlayerAttached(Entity<RelayInputMoverComponent> entity, ref PlayerAttachedEvent args)
@@ -63,51 +164,73 @@ public sealed class MoverController : SharedMoverController
         return true;
     }
 
-    private HashSet<EntityUid> _moverAdded = new();
-    private List<Entity<InputMoverComponent>> _movers = new();
-
-    private void InsertMover(Entity<InputMoverComponent> source)
-    {
-        if (TryComp(source, out MovementRelayTargetComponent? relay))
-        {
-            if (TryComp(relay.Source, out InputMoverComponent? relayMover))
-            {
-                InsertMover((relay.Source, relayMover));
-            }
-        }
-
-        // Already added
-        if (!_moverAdded.Add(source.Owner))
-            return;
-
-        _movers.Add(source);
-    }
-
     public override void UpdateBeforeSolve(bool prediction, float frameTime)
     {
         base.UpdateBeforeSolve(prediction, frameTime);
 
-        _moverAdded.Clear();
-        _movers.Clear();
-        var inputQueryEnumerator = AllEntityQuery<InputMoverComponent>();
+        // We use _seenMovers here as well as in UpdateMoverStatus—this means we
+        // cannot have any events get fired while we use it in this while loop.
+        _seenMovers.Clear();
+        _moversToUpdate.Clear();
 
-        // Need to order mob movement so that movers don't run before their relays.
-        while (inputQueryEnumerator.MoveNext(out var uid, out var mover))
+        // Don't use EntityQueryEnumerator because admin ghosts have to move on
+        // paused maps. Pausing movers is handled via ActiveInputMoverComponent.
+        var inputQueryEnumerator = AllEntityQuery<ActiveInputMoverComponent, InputMoverComponent>();
+        while (inputQueryEnumerator.MoveNext(out var uid, out var activeComp, out var moverComp))
         {
-            InsertMover((uid, mover));
+            _seenRelayMovers.Clear(); // O(1) if already empty
+            QueueRelaySources(activeComp.RelayedFrom);
+
+            // If it's already inserted, that's fine—that means it'll still be
+            // handled before its child movers
+            AddMover((uid, moverComp));
         }
 
-        foreach (var mover in _movers)
-        {
-            HandleMobMovement(mover, frameTime);
-        }
+        ActiveMoverGauge.Set(_moversToUpdate.Count);
 
-        ActiveMoverGauge.Set(_movers.Count);
+        foreach (var ent in _moversToUpdate)
+        {
+            HandleMobMovement(ent, frameTime);
+        }
 
         HandleShuttleMovement(frameTime);
+        return;
+
+        // When we insert a chain of relay sources we have to flip its ordering
+        // It's going to be extremely uncommon for a relay chain to be more than
+        // one entity so we just recurse as needed.
+        void QueueRelaySources(EntityUid? next)
+        {
+            // We only care if it's still a mover
+            if (!_activeQuery.TryComp(next, out var nextActive)
+                || !MoverQuery.TryComp(next, out var nextMover)
+                || !_seenRelayMovers.Add(next.Value))
+                return;
+
+            Debug.Assert(next.Value != nextActive.RelayedFrom);
+
+            // While it is (as of writing) currently true that this recursion
+            // should always terminate due to RelayedFrom always being written
+            // in a way that tracks if it's made a loop, we still take the extra
+            // memory (and small time cost) of making sure via _seenRelayMovers.
+            QueueRelaySources(nextActive.RelayedFrom);
+            AddMover((next.Value, nextMover));
+        }
+
+        // Track inserts so we have ~ O(1) inserts without duplicates. Hopefully
+        // it doesn't matter that both _seenMovers and _moversToUpdate are never
+        // trimmed? They should be pretty memory light anyway, and in general
+        // it'll be rare for there to be a decrease in movers.
+        void AddMover(Entity<InputMoverComponent> entity)
+        {
+            if (!_seenMovers.Add(entity))
+                return;
+
+            _moversToUpdate.Add(entity);
+        }
     }
 
-    public (Vector2 Strafe, float Rotation, float Brakes) GetPilotVelocityInput(PilotComponent component)
+    public (Vector2 Strafe, float Rotation, float Brakes, float Align) GetPilotVelocityInput(PilotComponent component) // Carpmosia-edit - rotate shuttle along movement vector
     {
         if (!Timing.InSimulation)
         {
@@ -116,7 +239,7 @@ public sealed class MoverController : SharedMoverController
             // Physics system will have the correct time step anyways.
             ResetSubtick(component);
             ApplyTick(component, 1f);
-            return (component.CurTickStrafeMovement, component.CurTickRotationMovement, component.CurTickBraking);
+            return (component.CurTickStrafeMovement, component.CurTickRotationMovement, component.CurTickBraking, component.CurTickAligning); // Carpmosia-edit - rotate shuttle along movement vector
         }
 
         float remainingFraction;
@@ -126,6 +249,7 @@ public sealed class MoverController : SharedMoverController
             component.CurTickStrafeMovement = Vector2.Zero;
             component.CurTickRotationMovement = 0f;
             component.CurTickBraking = 0f;
+            component.CurTickAligning = 0f; // Carpmosia-edit - rotate shuttle along movement vector
             remainingFraction = 1;
         }
         else
@@ -136,7 +260,7 @@ public sealed class MoverController : SharedMoverController
         ApplyTick(component, remainingFraction);
 
         // Logger.Info($"{curDir}{walk}{sprint}");
-        return (component.CurTickStrafeMovement, component.CurTickRotationMovement, component.CurTickBraking);
+        return (component.CurTickStrafeMovement, component.CurTickRotationMovement, component.CurTickBraking, component.CurTickAligning); // Carpmosia-edit - rotate shuttle along movement vector
     }
 
     private void ResetSubtick(PilotComponent component)
@@ -146,13 +270,14 @@ public sealed class MoverController : SharedMoverController
         component.CurTickStrafeMovement = Vector2.Zero;
         component.CurTickRotationMovement = 0f;
         component.CurTickBraking = 0f;
+        component.CurTickAligning = 0f; // Carpmosia-edit - rotate shuttle along movement vector
         component.LastInputTick = Timing.CurTick;
         component.LastInputSubTick = 0;
     }
 
     protected override void HandleShuttleInput(EntityUid uid, ShuttleButtons button, ushort subTick, bool state)
     {
-        if (!TryComp<PilotComponent>(uid, out var pilot) || pilot.Console == null)
+        if (!PilotQuery.TryComp(uid, out var pilot) || pilot.Console == null)
             return;
 
         ResetSubtick(pilot);
@@ -185,6 +310,7 @@ public sealed class MoverController : SharedMoverController
         var y = 0;
         var rot = 0;
         int brake;
+        var align = 0; // Carpmosia-edit - rotate shuttle along movement vector
 
         if ((component.HeldButtons & ShuttleButtons.StrafeLeft) != 0x0)
         {
@@ -232,6 +358,20 @@ public sealed class MoverController : SharedMoverController
         }
 
         component.CurTickBraking += brake * fraction;
+
+        // Carpmosia-start - rotate shuttle along movement vector
+        if ((component.HeldButtons & ShuttleButtons.TowardVector) != 0x0)
+        {
+            align += 1;
+        }
+
+        if ((component.HeldButtons & ShuttleButtons.AgainstVector) != 0x0)
+        {
+            align -= 1;
+        }
+
+        component.CurTickAligning += align * fraction;
+        // Carpmosia-end - rotate shuttle along movement vector
     }
 
     /// <summary>
@@ -263,27 +403,25 @@ public sealed class MoverController : SharedMoverController
 
         // We just mark off their movement and the shuttle itself does its own movement
         var activePilotQuery = EntityQueryEnumerator<PilotComponent, InputMoverComponent>();
-        var shuttleQuery = GetEntityQuery<ShuttleComponent>();
         while (activePilotQuery.MoveNext(out var uid, out var pilot, out var mover))
         {
             var consoleEnt = pilot.Console;
 
             // TODO: This is terrible. Just make a new mover and also make it remote piloting + device networks
-            if (TryComp<DroneConsoleComponent>(consoleEnt, out var cargoConsole))
-            {
+            if (_droneQuery.TryComp(consoleEnt, out var cargoConsole))
                 consoleEnt = cargoConsole.Entity;
-            }
 
-            if (!TryComp(consoleEnt, out TransformComponent? xform)) continue;
+            if (!XformQuery.TryComp(consoleEnt, out var xform))
+                continue;
 
             var gridId = xform.GridUid;
             // This tries to see if the grid is a shuttle and if the console should work.
-            if (!TryComp<MapGridComponent>(gridId, out var _) ||
-                !shuttleQuery.TryGetComponent(gridId, out var shuttleComponent) ||
+            if (!MapGridQuery.HasComp(gridId) ||
+                !_shuttleQuery.TryGetComponent(gridId, out var shuttleComponent) ||
                 !shuttleComponent.Enabled)
                 continue;
 
-            if (!newPilots.TryGetValue(gridId!.Value, out var pilots))
+            if (!newPilots.TryGetValue(gridId.Value, out var pilots))
             {
                 pilots = (shuttleComponent, new List<(EntityUid, PilotComponent, InputMoverComponent, TransformComponent)>());
                 newPilots[gridId.Value] = pilots;
@@ -305,25 +443,26 @@ public sealed class MoverController : SharedMoverController
 
         // Collate all of the linear / angular velocites for a shuttle
         // then do the movement input once for it.
-        var xformQuery = GetEntityQuery<TransformComponent>();
         foreach (var (shuttleUid, (shuttle, pilots)) in _shuttlePilots)
         {
-            if (Paused(shuttleUid) || CanPilot(shuttleUid) || !TryComp<PhysicsComponent>(shuttleUid, out var body))
+            if (Paused(shuttleUid) || CanPilot(shuttleUid) || !PhysicsQuery.TryComp(shuttleUid, out var body))
                 continue;
 
-            var shuttleNorthAngle = _xformSystem.GetWorldRotation(shuttleUid, xformQuery);
+            var shuttleNorthAngle = TransformSystem.GetWorldRotation(shuttleUid, XformQuery);
 
             // Collate movement linear and angular inputs together
             var linearInput = Vector2.Zero;
             var brakeInput = 0f;
             var angularInput = 0f;
+            var alignInput = 0f; // Carpmosia-edit - rotate shuttle along movement vector
             var linearCount = 0;
             var brakeCount = 0;
             var angularCount = 0;
+            var alignCount = 0; // Carpmosia-edit - rotate shuttle along movement vector
 
-            foreach (var (pilotUid, pilot, _, consoleXform) in pilots)
+            foreach (var (_, pilot, _, consoleXform) in pilots)
             {
-                var (strafe, rotation, brakes) = GetPilotVelocityInput(pilot);
+                var (strafe, rotation, brakes, align) = GetPilotVelocityInput(pilot); // Carpmosia-edit - rotate shuttle along movement vector
 
                 if (brakes > 0f)
                 {
@@ -343,12 +482,20 @@ public sealed class MoverController : SharedMoverController
                     angularInput += rotation;
                     angularCount++;
                 }
+                // Carpmosia-start - rotate shuttle along movement vector
+                if (align != 0f)
+                {
+                    alignInput += align;
+                    alignCount++;
+                }
+                // Carpmosia-end - rotate shuttle along movement vector
             }
 
             // Don't slow down the shuttle if there's someone just looking at the console
             linearInput /= Math.Max(1, linearCount);
             angularInput /= Math.Max(1, angularCount);
             brakeInput /= Math.Max(1, brakeCount);
+            alignInput /= Math.Max(1, alignCount); // Carpmosia-edit - rotate shuttle along movement vector
 
             // Handle shuttle movement
             if (brakeInput > 0f)
@@ -445,6 +592,65 @@ public sealed class MoverController : SharedMoverController
                     _thruster.SetAngularThrust(shuttle, false);
                 }
             }
+
+            /// Carpmosia-start - rotate shuttle along movement vector
+            if (!alignInput.Equals(0f) && !MathHelper.CloseTo(body.LinearVelocity.Length(), 0f, 0.01f))
+            {
+                // Get velocity relative to the shuttle
+                var shuttleVelocity = (-shuttleNorthAngle).RotateVec(body.LinearVelocity);
+                var torqueMul = body.InvI * frameTime;
+
+                //find angle between current orientation and movement vector
+                var targetAngle = alignInput > 0f ?
+                    MathF.Acos(shuttleVelocity.Y / shuttleVelocity.Length()) : MathF.Acos(-shuttleVelocity.Y / shuttleVelocity.Length());
+
+                targetAngle *= MathF.Sign(shuttleVelocity.X);
+
+                //perform PI controller calculation
+                var pidInput = body.AngularVelocity;
+
+                var setpoint = alignInput > 0f ? -targetAngle : targetAngle;
+
+                var maxTorque = (ShuttleComponent.MaxAngularVelocity - body.AngularVelocity) / torqueMul;
+                var minTorque = (-ShuttleComponent.MaxAngularVelocity - body.AngularVelocity) / torqueMul;
+
+                shuttle.AccParams.MaxVal = maxTorque;
+                shuttle.AccParams.MinVal = minTorque;
+#if DEBUG || TOOLS
+                shuttle.AccParams.Kp = shuttle.Kp;
+                shuttle.AccParams.Ti = shuttle.Ti;
+                shuttle.AccParams.Td = shuttle.Td;
+#endif
+                var torque = -PIDSystem.Controller(pidInput, setpoint, ref shuttle.AccParams, frameTime);
+
+                torque = Math.Clamp(torque, minTorque, maxTorque);
+
+                if (!torque.Equals(0f))
+                {
+                    PhysicsSystem.ApplyTorque(shuttleUid, torque, body: body);
+                    _thruster.SetAngularThrust(shuttle, true);
+                }
+                else
+                {
+                    _thruster.SetAngularThrust(shuttle, false);
+                }
+
+            }
+            //don't immediatelly zero out accrued integral
+            else if (!MathHelper.CloseTo(shuttle.AccParams.Integral, 0f, 2f))
+            {
+                shuttle.AccParams.Integral += shuttle.AccParams.Integral > 0f ? -MathF.Sqrt(MathF.Abs(shuttle.AccParams.Integral)) : MathF.Sqrt(MathF.Abs(shuttle.AccParams.Integral));
+            }
+            else
+            {
+                shuttle.AccParams.Integral = 0f;
+            }
+
+            if (alignInput.Equals(0f))
+            {
+                shuttle.AccParams.PrevError = 0f;
+            }
+            /// Carpmosia-end - rotate shuttle along movement vector
 
             if (linearInput.Length().Equals(0f))
             {
@@ -571,9 +777,9 @@ public sealed class MoverController : SharedMoverController
 
     private bool CanPilot(EntityUid shuttleUid)
     {
-        return TryComp<FTLComponent>(shuttleUid, out var ftl)
+        return FTLQuery.TryComp(shuttleUid, out var ftl)
         && (ftl.State & (FTLState.Starting | FTLState.Travelling | FTLState.Arriving)) != 0x0
-            || HasComp<PreventPilotComponent>(shuttleUid);
+            || PreventPilotQuery.HasComp(shuttleUid);
     }
 
 }

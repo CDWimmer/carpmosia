@@ -72,39 +72,35 @@
   - type: Appearance
   - type: WiresVisuals
   - type: Sprite
-    sprite: Structures/Wallmounts/air_monitors.rsi
+    sprite: _Carpmosia/Structures/Wallmounts/air_monitors.rsi # Carpmosia-edit - APC/Alarm resprite
     layers:
     - state: alarmp
       map: ["airAlarmBase"]
     - state: alarm0
       map: ["airAlarmState"] # TODO: fire alarm enum
+      shader: unshaded # Carpmosia-edit - APC/Alarm resprite
     - state: alarmx
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: Construction
     graph: AirAlarm
     node: air_alarm
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 200
-        behaviors:
-          - !type:DoActsBehavior
-            acts: [ "Destruction" ]
-      - trigger:
-          !type:DamageTrigger
-          damage: 100
-        behaviors:
-          - !type:DoActsBehavior
-            acts: [ "Destruction" ]
-          - !type:PlaySoundBehavior
-            sound:
-              collection: MetalGlassBreak
-              params:
-                volume: -4
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+          params:
+            volume: -4
   - type: GuideHelp
     guides:
     - AirAlarms
@@ -117,7 +113,7 @@
   description: An air alarm. Doesn't look like it'll be alarming air any time soon.
   components:
   - type: Sprite
-    sprite: Structures/Wallmounts/air_monitors.rsi
+    sprite: _Carpmosia/Structures/Wallmounts/air_monitors.rsi # Carpmosia-edit - APC/Alarm resprite
     layers:
     - state: alarm_b1
       map: [ "enum.ConstructionVisuals.Layer" ]
@@ -135,23 +131,17 @@
     anchored: true
   - type: Destructible
     thresholds:
-      - trigger:
-          !type:DamageTrigger
-          damage: 20
-        behaviors:
-          - !type:DoActsBehavior
-            acts: [ "Destruction" ]
-      - trigger:
-          !type:DamageTrigger
-          damage: 15
-        behaviors:
-          - !type:DoActsBehavior
-            acts: [ "Destruction" ]
-          - !type:PlaySoundBehavior
-            sound:
-              collection: MetalGlassBreak
-              params:
-                volume: -4
+    - trigger:
+        !type:DamageTrigger
+        damage: 15
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+          params:
+            volume: -4
 
 - type: entity
   id: AirAlarmXeno
@@ -159,10 +149,13 @@
   description: An alien air alarm. Hopefully they didn't breathe poison.
   components:
   - type: Sprite
-    sprite: Structures/Wallmounts/air_monitors_xeno.rsi
+    sprite: _Carpmosia/Structures/Wallmounts/air_monitors_xeno.rsi # Carpmosia-edit - APC/Alarm resprite
     layers:
+    - state: alarmp
+      map: ["airAlarmBase"]  # TODO: fire alarm enum
     - state: alarm0
-      map: ["airAlarmBase"] # TODO: fire alarm enum
+      map: ["airAlarmState"]
+      shader: unshaded # Carpmosia-edit - APC/Alarm resprite
     - state: alarmx
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
 
@@ -172,4 +165,4 @@
   description: An alien air alarm. Why are the wires pulsating?...
   components:
   - type: Sprite
-    sprite: Structures/Wallmounts/air_monitors_xeno.rsi
+    sprite: _Carpmosia/Structures/Wallmounts/air_monitors_xeno.rsi # Carpmosia-edit - APC/Alarm resprite

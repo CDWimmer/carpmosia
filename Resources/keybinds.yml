@@ -66,6 +66,14 @@ binds:
 - function: ShuttleBrake
   type: State
   key: Space
+  # Carpmosia-start - rotate shuttle along movement vector
+- function: ShuttleTowardsVector
+  type: State
+  key: Z
+- function: ShuttleAgainstVector
+  type: State
+  key: X
+  # Carpmosia-end - rotate shuttle along movement vector
 # Camera
 - function: CameraRotateLeft
   type: State
@@ -281,6 +289,14 @@ binds:
   type: State
   key: v
   mod1: Alt
+- function: InspectServerComponent
+  type: State
+  key: b
+  mod1: Alt
+- function: InspectClientComponent
+  type: State
+  key: c
+  mod1: Alt
 - function: MouseMiddle
   type: State
   key: MouseMiddle
@@ -482,7 +498,7 @@ binds:
   type: State
   key: F8
 - function: ToggleRoundEndSummaryWindow
-  type: Toggle
+  type: State
   key: F9
 - function: OpenSandboxWindow
   type: State

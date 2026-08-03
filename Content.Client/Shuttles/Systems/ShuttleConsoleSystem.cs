@@ -7,10 +7,10 @@ using Robust.Shared.GameStates;
 
 namespace Content.Client.Shuttles.Systems
 {
-    public sealed class ShuttleConsoleSystem : SharedShuttleConsoleSystem
+    public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     {
-        [Dependency] private readonly IInputManager _input = default!;
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
+        [Dependency] private IInputManager _input = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
 
         public override void Initialize()
         {
@@ -24,6 +24,10 @@ namespace Content.Client.Shuttles.Systems
             shuttle.AddFunction(ContentKeyFunctions.ShuttleRotateLeft);
             shuttle.AddFunction(ContentKeyFunctions.ShuttleRotateRight);
             shuttle.AddFunction(ContentKeyFunctions.ShuttleBrake);
+            // Carpmosia-start - rotate shuttle along movement vector
+            shuttle.AddFunction(ContentKeyFunctions.ShuttleTowardsVector);
+            shuttle.AddFunction(ContentKeyFunctions.ShuttleAgainstVector);
+            // Carpmosia-end - rotate shuttle along movement vector
         }
 
         public override void Shutdown()

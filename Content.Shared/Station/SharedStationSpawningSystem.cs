@@ -4,7 +4,10 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
 using Content.Shared.Preferences.Loadouts;
+using Content.Shared.Random.Helpers; // Carpmosia-edit - Lawset loadouts
 using Content.Shared.Roles;
+using Content.Shared.Silicons.Laws; // Carpmosia-edit - Lawset loadouts
+using Content.Shared.Silicons.Laws.Components; // Carpmosia-edit - Lawset loadouts
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
 using Robust.Shared.Collections;
@@ -14,29 +17,20 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Station;
 
-public abstract class SharedStationSpawningSystem : EntitySystem
+public abstract partial class SharedStationSpawningSystem : EntitySystem
 {
-    [Dependency] protected readonly IPrototypeManager PrototypeManager = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] protected readonly InventorySystem InventorySystem = default!;
-    [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
-    [Dependency] private readonly MetaDataSystem _metadata = default!;
-    [Dependency] private readonly SharedStorageSystem _storage = default!;
-    [Dependency] private readonly SharedTransformSystem _xformSystem = default!;
+    [Dependency] protected IPrototypeManager PrototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] protected InventorySystem InventorySystem = default!;
+    [Dependency] private SharedHandsSystem _handsSystem = default!;
+    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private SharedStorageSystem _storage = default!;
+    [Dependency] private SharedTransformSystem _xformSystem = default!;
 
-    private EntityQuery<HandsComponent> _handsQuery;
-    private EntityQuery<InventoryComponent> _inventoryQuery;
-    private EntityQuery<StorageComponent> _storageQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        _handsQuery = GetEntityQuery<HandsComponent>();
-        _inventoryQuery = GetEntityQuery<InventoryComponent>();
-        _storageQuery = GetEntityQuery<StorageComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-    }
+    [Dependency] private EntityQuery<HandsComponent> _handsQuery = default!;
+    [Dependency] private EntityQuery<InventoryComponent> _inventoryQuery = default!;
+    [Dependency] private EntityQuery<StorageComponent> _storageQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     /// <summary>
     ///     Equips the data from a `RoleLoadout` onto an entity.
@@ -58,8 +52,67 @@ public abstract class SharedStationSpawningSystem : EntitySystem
             }
         }
 
+        EquipLawset(entity, loadout, roleProto); // Carpmosia-edit - Lawset loadouts
         EquipRoleName(entity, loadout, roleProto);
     }
+
+    // Carpmosia-start - Lawset loadouts
+    public void EquipLawset(EntityUid entity, RoleLoadout loadout, RoleLoadoutPrototype roleProto)
+    {
+        if (!TryComp<SiliconLawProviderComponent>(entity, out var siliconLaw))
+            return;
+
+        float weight = 0;
+        var weights = new Dictionary<ProtoId<SiliconLawsetPrototype>, float>();
+
+        foreach (var group in loadout.SelectedLoadouts.OrderBy(x => roleProto.Groups.FindIndex(e => e == x.Key)).Reverse())
+        {
+            if (!PrototypeManager.Resolve(group.Key, out var groupProto))
+                continue;
+
+            if (groupProto.GroupWeight == null)
+                continue;
+
+            weight += groupProto.GroupWeight.Value;
+            var singleWeght = weight / groupProto.Loadouts.Count;
+
+            foreach (var items in group.Value)
+            {
+                if (!PrototypeManager.Resolve(items.Prototype, out var loadoutProto))
+                    continue;
+
+                if (loadoutProto.Lawset == null)
+                {
+                    Log.Error($"Unable to find lawset for loadout {items.Prototype}");
+                    continue;
+                }
+
+                weights.Add(loadoutProto.Lawset.Value, singleWeght);
+                weight -= singleWeght * group.Value.Count;
+            }
+        }
+
+        if (weights.Count == 0)
+            return;
+
+        var pick = _random.Pick(weights);
+
+        if (!PrototypeManager.Resolve(pick, out var lawset))
+            return;
+
+        siliconLaw.Laws = lawset;
+        siliconLaw.Lawset = new SiliconLawset()
+        {
+            Laws = new List<SiliconLaw>(lawset.Laws.Count),
+        };
+        foreach (var law in lawset.Laws)
+        {
+            siliconLaw.Lawset.Laws.Add(PrototypeManager.Index(law).ShallowClone());
+        }
+
+        siliconLaw.Lawset.ObeysTo = lawset.ObeysTo;
+    }
+    // Carpmosia-end - Lawset loadouts
 
     /// <summary>
     /// Applies the role's name as applicable to the entity.

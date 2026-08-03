@@ -1,5 +1,8 @@
+using Content.Server.Discord.DiscordLink; // Carpmosia-edit - Discord newjoin alert
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
+using Content.Shared.Chat; // Carpmosia-edit - Discord newjoin alert
+using Content.Shared.Database;
 using Content.Shared.GameTicking;
 using Content.Shared.GameWindow;
 using Content.Shared.Players;
@@ -17,7 +20,8 @@ namespace Content.Server.GameTicking
     [UsedImplicitly]
     public sealed partial class GameTicker
     {
-        [Dependency] private readonly IPlayerManager _playerManager = default!;
+        [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private DiscordChatLink _discordLink = default!; // Carpmosia-edit - Discord newjoin alert
 
         private void InitializePlayer()
         {
@@ -70,6 +74,12 @@ namespace Content.Server.GameTicking
                         _audio.PlayGlobal(new SoundPathSpecifier("/Audio/Effects/newplayerping.ogg"),
                             Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false,
                             audioParams: new AudioParams { Volume = -5f });
+                        
+                    // Carpmosia-start - Discord newjoin alert
+                    if (firstConnection && _cfg.GetCVar(CCVars.AdminChatAlertNewjoin))
+                        _discordLink.SendMessage(Loc.GetString("player-first-join-message", ("name", args.Session.Name)),
+                            "System", ChatChannel.AdminChat);
+                    // Carpmosia-end - Discord newjoin alert
 
                     if (LobbyEnabled && _roundStartCountdownHasNotStartedYetDueToNoPlayers)
                     {
@@ -91,6 +101,7 @@ namespace Content.Server.GameTicking
                         else
                             SpawnWaitDb();
 
+                        _adminLogger.Add(LogType.Connection, LogImpact.Low, $"User {args.Session:Player} attached to {(args.Session.AttachedEntity != null ? ToPrettyString(args.Session.AttachedEntity) : "nothing"):entity} connected to the game.");
                         break;
                     }
 
@@ -117,6 +128,8 @@ namespace Content.Server.GameTicking
                         }
                     }
 
+                    _adminLogger.Add(LogType.Connection, LogImpact.Low, $"User {args.Session:Player} attached to {(args.Session.AttachedEntity != null ? ToPrettyString(args.Session.AttachedEntity) : "nothing"):entity} connected to the game.");
+
                     break;
                 }
 
@@ -129,6 +142,8 @@ namespace Content.Server.GameTicking
                     }
 
                     _userDb.ClientDisconnected(session);
+
+                    _adminLogger.Add(LogType.Connection, LogImpact.Low, $"User {args.Session:Player} attached to {(args.Session.AttachedEntity != null ? ToPrettyString(args.Session.AttachedEntity) : "nothing"):entity} disconnected from the game.");
                     break;
                 }
             }

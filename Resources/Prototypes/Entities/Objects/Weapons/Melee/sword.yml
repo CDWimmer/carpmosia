@@ -2,11 +2,10 @@
 
 #BaseSword
 - type: entity
-  parent: BaseItem
+  parent: [ BaseItem, BasePointerDagger ] # Carpmosia-edit - Pointing modifier
   id: BaseSword
   abstract: true
   components:
-  - type: Sharp
   - type: Execution
     doAfterDuration: 4.0
   - type: MeleeWeapon
@@ -72,7 +71,7 @@
   name: captain's sabre
   parent: [ BaseSword, BaseCommandContraband ]
   id: CaptainSabre
-  description: A ceremonial weapon belonging to the captain of the station.
+  description: A ceremonial weapon belonging to the captain of the station. It's sleek profile and strong build lets it pry open unpowered airlocks. # Carpmosia-edit - Prying blades
   components:
   - type: Sprite
     sprite: Objects/Weapons/Melee/captain_sabre.rsi
@@ -103,6 +102,10 @@
     # not putting a BlockMovement component here cause that's funny.
   - type: StealTarget
     stealGroup: CaptainSword
+  # Carpmosia-start - Prying blades
+  - type: Prying
+    speedModifier: 0.6
+  # Carpmosia-end - Prying blades
 
 - type: entity
   name: katana
@@ -199,7 +202,7 @@
 #Other/Weird
 - type: entity
   name: throngler
-  parent: [ BaseSword, BaseMajorContraband ]
+  parent: [ BasePointerArrow, BaseSword, BaseMajorContraband ] # Carpmosia-edit - Pointing modifier
   id: Throngler
   description: If Security dares take it from you, just remind them that they are indeed mortal.
   components:

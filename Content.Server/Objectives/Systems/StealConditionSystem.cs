@@ -12,20 +12,20 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Stacks;
+using Content.Shared.BloodBound.Components; // Carpmosia-edit - Shared Blood Bound Objectives
 
 namespace Content.Server.Objectives.Systems;
 
-public sealed class StealConditionSystem : EntitySystem
+public sealed partial class StealConditionSystem : EntitySystem
 {
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
-    [Dependency] private readonly SharedObjectivesSystem _objectives = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-
-    private EntityQuery<ContainerManagerComponent> _containerQuery;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedObjectivesSystem _objectives = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private EntityQuery<ContainerManagerComponent> _containerQuery = default!;
 
     private HashSet<Entity<TransformComponent>> _nearestEnts = new();
     private HashSet<EntityUid> _countedItems = new();
@@ -33,8 +33,6 @@ public sealed class StealConditionSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
-        _containerQuery = GetEntityQuery<ContainerManagerComponent>();
 
         SubscribeLocalEvent<StealConditionComponent, ObjectiveAssignedEvent>(OnAssigned);
         SubscribeLocalEvent<StealConditionComponent, ObjectiveAfterAssignEvent>(OnAfterAssign);
@@ -98,12 +96,15 @@ public sealed class StealConditionSystem : EntitySystem
 
     private float GetProgress(Entity<MindComponent> mind, StealConditionComponent condition)
     {
-        if (!_containerQuery.TryGetComponent(mind.Comp.OwnedEntity, out var currentManager))
-            return 0;
-
         var containerStack = new Stack<ContainerManagerComponent>();
         var count = 0;
 
+        // Carpmosia-start - Shared Blood Bound Objectives
+        foreach(var ally in CheckAllies(mind))
+        {
+        if (!_containerQuery.TryGetComponent(ally, out var currentManager))
+            return 0;
+        // Carpmosia-end - Shared Blood Bound Objectives
         _countedItems.Clear();
 
         //check stealAreas
@@ -128,7 +129,7 @@ public sealed class StealConditionSystem : EntitySystem
         }
 
         //check pulling object
-        if (TryComp<PullerComponent>(mind.Comp.OwnedEntity, out var pull)) //TO DO: to make the code prettier? don't like the repetition
+        if (TryComp<PullerComponent>(ally, out var pull)) // Carpmosia-edit - Shared Blood Bound Objectives
         {
             var pulledEntity = pull.Pulling;
             if (pulledEntity != null)
@@ -154,6 +155,7 @@ public sealed class StealConditionSystem : EntitySystem
                 }
             }
         } while (containerStack.TryPop(out currentManager));
+        }  // Carpmosia-edit - Shared Blood Bound Objectives
 
         var result = count / (float)condition.CollectionSize;
         result = Math.Clamp(result, 0, 1);
@@ -205,4 +207,18 @@ public sealed class StealConditionSystem : EntitySystem
 
         return TryComp<StackComponent>(entity, out var stack) ? stack.Count : 1;
     }
+
+    // Carpmosia-start - Shared Blood Bound Objectives
+    private List<EntityUid?> CheckAllies(Entity<MindComponent> mind)
+    {
+        List<EntityUid?> ents = new();
+        ents.Add(mind.Comp.OwnedEntity);
+
+        // TODO: Insert other checks for familiars etc
+        if(TryComp<BloodBoundComponent>(mind.Comp.OwnedEntity, out var bloodBoundComp))
+            ents.Add(bloodBoundComp.Bound);
+
+        return ents;
+    }
+    // Carpmosia-end - Shared Blood Bound Objectives
 }

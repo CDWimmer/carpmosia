@@ -1,6 +1,6 @@
 - type: entity
   name: BaseWeaponLightMachineGun
-  parent: BaseItem
+  parent: [ BaseItem, BasePointerCrosshair ] # Carpmosia-edit - Pointing modifier
   id: BaseWeaponLightMachineGun
   description: A rooty tooty point and shooty.
   abstract: true
@@ -51,7 +51,6 @@
             - MagazineLightRifleBox
       gun_chamber:
         name: Chamber
-        startingItem: CartridgeLightRifle
         priority: 1
         whitelist:
           tags:
@@ -89,7 +88,7 @@
 - type: entity
   name: L6C ROW
   id: WeaponLightMachineGunL6C
-  parent: BaseItem
+  parent: [ BaseItem, BasePointerCrosshair ] # Carpmosia-edit - Pointing modifier
   description: A L6 SAW for use by cyborgs. Creates .30 rifle ammo on the fly from an internal ammo fabricator, which slowly self-charges.
   components:
     - type: Gun
@@ -117,13 +116,14 @@
     - type: ContainerContainer
       containers:
         ballistic-ammo: !type:Container
-    - type: ProjectileBatteryAmmoProvider
+    - type: BallisticAmmoProvider
+      whitelist:
+        tags:
+        - CartridgeLightRifle
+      capacity: 100
       proto: CartridgeLightRifle
-      fireCost: 100
-    - type: Battery
-      maxCharge: 10000
-      startingCharge: 10000
-    - type: BatterySelfRecharger
-      autoRecharge: true
-      autoRechargeRate: 25
+      cycleable: false # No synthesizing ammo for your syndicate masters.
+    - type: BallisticAmmoSelfRefiller
+      autoRefillRate: 4s
+      affectedByEmp: true
     - type: AmmoCounter

@@ -1,6 +1,6 @@
 - type: entity
   name: improvised pneumatic cannon
-  parent: [BaseStorageItem, BaseMinorContraband]
+  parent: [ BaseStorageItem, BaseMinorContraband, BasePointerCrosshair ] # Carpmosia-edit - Pointing modifier
   id: WeaponImprovisedPneumaticCannon
   description: Improvised using nothing but a pipe, some zipties, and a pneumatic cannon. Doesn't accept tanks without enough gas.
   components:
@@ -63,9 +63,10 @@
       gas_tank: !type:ContainerSlot
 
 - type: entity
-  name: pie cannon
   parent: BaseStorageItem
   id: LauncherCreamPie
+  name: pie cannon
+  suffix: Empty
   description: Load cream pie for optimal results.
   components:
   - type: Sprite
@@ -125,14 +126,13 @@
     soundEmpty:
       path: /Audio/Items/hiss.ogg
     clumsyProof: true
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: FoodPieBananaCream
     fireCost: 30
   - type: Battery
     maxCharge: 90
     startingCharge: 90
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 1
   - type: AmmoCounter
   - type: Item
@@ -198,11 +198,13 @@
     maxItemSize: Ginormous
     grid:
     - 0,0,19,10
-    whitelist:
-      tags: [] #dodging a test fail like the IRS
+    # Carpmosia-start - Fix admeme pneumatic cannon
+    # whitelist:
+    #   tags: [] #dodging a test fail like the IRS
+    # Carpmosia-end - Fix admeme pneumatic cannon
   - type: PneumaticCannon
     gasUsage: 0
-    throwItems: false
+    # throwItems: false # Carpmosia-edit - Fix admeme pneumatic cannon
   - type: Gun
     fireRate: 10
     selectedMode: FullAuto

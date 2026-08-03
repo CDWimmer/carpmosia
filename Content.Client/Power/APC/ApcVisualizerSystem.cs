@@ -3,9 +3,9 @@ using Robust.Client.GameObjects;
 
 namespace Content.Client.Power.APC;
 
-public sealed class ApcVisualizerSystem : VisualizerSystem<ApcVisualsComponent>
+public sealed partial class ApcVisualizerSystem : VisualizerSystem<ApcVisualsComponent>
 {
-    [Dependency] private readonly SharedPointLightSystem _lights = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
 
     protected override void OnAppearanceChange(EntityUid uid, ApcVisualsComponent comp, ref AppearanceChangeEvent args)
     {
@@ -56,7 +56,8 @@ public sealed class ApcVisualizerSystem : VisualizerSystem<ApcVisualsComponent>
         else
         {
             /// Overrides all of the lock and channel indicators.
-            SpriteSystem.LayerSetRsiState((uid, args.Sprite), ApcVisualLayers.ChargeState, comp.EmaggedScreenState);
+            AppearanceSystem.TryGetData<int>(uid, ApcVisuals.EmagVarient, out var emagVar, args.Component); // Carpmosia-edit - APC/Alarm resprite
+            SpriteSystem.LayerSetRsiState((uid, args.Sprite), ApcVisualLayers.ChargeState, comp.EmaggedScreenState[emagVar % comp.EmaggedScreenState.Length]); // Carpmosia-edit - APC/Alarm resprite
             for (var i = 0; i < comp.LockIndicators; ++i)
             {
                 var layer = (byte)lockIndicatorOverlayStart + i;

@@ -6,17 +6,17 @@
   components:
     - type: Sprite
       layers:
-        - map: ["computerLayerBody"]
-          state: computer
-        - map: ["computerLayerKeyboard"]
-          state: generic_keyboard
-        - map: ["computerLayerScreen"]
-          state: shuttle
-        - map: ["computerLayerKeys"]
-          state: generic_keys
+      - map: ["computerLayerBody"]
+        state: computer
+      - map: ["computerLayerKeyboard"]
+        state: generic_keyboard
+      - map: ["computerLayerScreen"]
+        state: shuttle
+      - map: ["computerLayerKeys"]
+        state: generic_keys
     - type: DroneConsole
       components:
-        - type: SalvageShuttle
+      - type: SalvageShuttle
     - type: RadarConsole
       maxRange: 256
     - type: PointLight
@@ -27,3 +27,12 @@
       board: SalvageShuttleConsoleCircuitboard
     - type: StealTarget
       stealGroup: SalvageShuttleConsoleCircuitboard
+
+# Used for event spawned Shuttles that spawn off the station map
+- type: entity
+  parent: ComputerShuttle
+  id: ComputerShuttleEvent
+  suffix: FTL
+  components:
+  - type: ShuttleConsole
+    ftlAllowed: true

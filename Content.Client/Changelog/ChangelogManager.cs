@@ -13,10 +13,10 @@ namespace Content.Client.Changelog
 {
     public sealed partial class ChangelogManager : IPostInjectInit
     {
-        [Dependency] private readonly ILogManager _logManager = default!;
-        [Dependency] private readonly IResourceManager _resource = default!;
-        [Dependency] private readonly ISerializationManager _serialization = default!;
-        [Dependency] private readonly IConfigurationManager _configManager = default!;
+        [Dependency] private ILogManager _logManager = default!;
+        [Dependency] private IResourceManager _resource = default!;
+        [Dependency] private ISerializationManager _serialization = default!;
+        [Dependency] private IConfigurationManager _configManager = default!;
 
         private const string SawmillName = "changelog";
         public const string MainChangelogName = "Changelog";
@@ -108,10 +108,10 @@ namespace Content.Client.Changelog
             return Task.Run(() =>
             {
                 var changelogs = new List<Changelog>();
-                var directory = new ResPath("/Changelog");
+                // var directory = new ResPath("/Changelog"); // Carpmosia-edit - Fix changelog
                 foreach (var file in _resource.ContentFindFiles(new ResPath("/Changelog/")))
                 {
-                    if (file.Directory != directory || file.Extension != "yml")
+                    if (file.Extension != "yml") // Carpmosia-edit - Fix changelog
                         continue;
 
                     var yamlData = _resource.ContentFileReadYaml(file);
