@@ -2580,4 +2580,11 @@
   id: 384
   time: '2026-08-05T18:36:32.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/563
+- author: Atakku
+  changes:
+  - message: 'Removed 3 upstream lobby arts: SSXIV, Susstation, Doomed'
+    type: Remove
+  id: 385
+  time: '2026-08-05T19:16:48.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/565
 Order: -1
