@@ -2566,4 +2566,11 @@
   id: 382
   time: '2026-08-02T23:38:01.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/551
+- author: Atakku
+  changes:
+  - message: Added "Surprise Surgery" lobby art
+    type: Add
+  id: 383
+  time: '2026-08-05T18:02:31.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/562
 Order: -1
