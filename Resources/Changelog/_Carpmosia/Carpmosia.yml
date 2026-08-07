@@ -2587,4 +2587,17 @@
   id: 385
   time: '2026-08-05T19:16:48.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/565
+- author: Atakku
+  changes:
+  - message: Spray painter color palette has been entirely replaced
+    type: Tweak
+  - message: Added new standardized colors for teg cold and hot loops, as well as
+      fuel and failsafe (small delta p exhaust)
+    type: Add
+  - message: Added a color for each gas to the spray painter (same as in the gas analyzer
+      menu)
+    type: Add
+  id: 386
+  time: '2026-08-07T13:20:51.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/570
 Order: -1
