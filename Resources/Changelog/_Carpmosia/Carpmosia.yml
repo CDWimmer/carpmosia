@@ -2600,4 +2600,11 @@
   id: 386
   time: '2026-08-07T13:20:51.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/570
+- author: Atakku
+  changes:
+  - message: Temporarily de-rotated all the maps
+    type: Remove
+  id: 387
+  time: '2026-08-07T22:35:28.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/561
 Order: -1
