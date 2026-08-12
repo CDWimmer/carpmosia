@@ -2643,4 +2643,13 @@
   id: 390
   time: '2026-08-12T16:16:21.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/575
+- author: Atakku
+  changes:
+  - message: Map vote options count has been reduced to 3
+    type: Tweak
+  - message: Map vote will now try to hide maps previously voted
+    type: Tweak
+  id: 391
+  time: '2026-08-12T22:27:57.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/583
 Order: -1
