@@ -134,7 +134,7 @@
   name: chat-emote-name-phone-ring
   category: Vocal
   available: false
-  icon: Interface/Emotes/Chime.png
+  icon: Interface/Emotes/chime.png
   chatMessages: ["chat-emote-msg-phone-ring"]
   chatTriggers:
   - ring

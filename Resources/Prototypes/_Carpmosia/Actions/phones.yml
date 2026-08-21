@@ -6,7 +6,7 @@
   components:
   - type: Action
     useDelay: 2
-    icon: Interface/Emotes/Chime.png
+    icon: Interface/Emotes/chime.png
     checkCanInteract: false
   - type: InstantAction
     event: !type:EmoteActionEvent
