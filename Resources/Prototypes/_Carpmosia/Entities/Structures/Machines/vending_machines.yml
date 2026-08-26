@@ -58,7 +58,7 @@
   - type: Store
     name: store-preset-name-vendor-beer
     categories:
-    - BeerStoreEquipment
+    - BeerStoreDrinks
     - BeerStoreSnacks
     currencyWhitelist:
     - SpaceCash

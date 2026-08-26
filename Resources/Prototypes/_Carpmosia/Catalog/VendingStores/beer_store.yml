@@ -11,7 +11,7 @@
 
 - type: listing
   id: BeerStoreCan
-  productEntity: DrinkBeercan
+  productEntity: DrinkBeerCan
   cost:
     SpaceCash: 180
   categories:
