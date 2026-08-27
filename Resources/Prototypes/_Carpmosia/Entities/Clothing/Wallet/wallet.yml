@@ -1,0 +1,35 @@
+
+# base
+- type: entity
+  parent: [Clothing, BaseStorageItem]
+  id: Wallet
+  name: wallet
+  description: Never leave the station without it!
+  components:
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots: [belt]
+  - type: Storage
+    grid:
+    - 0,0,2,1
+    whitelist:
+      components:
+      - Currency  # salvage tickets, speso
+      - Paper  # idk you can probaly shove a sheet of paper or note in there??
+    maxItemSize: Small
+  - type: Sprite  # idk sure whatever
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet.rsi
+    state: icon
+  - type: UseDelay
+    delay: 0.5
+
+
+# - type: entity  # i cant be bothered
+#   parent: Wallet
+#   id: WalletPurse
+#   name: purse
+#   components:
+#   - type: Sprite
+#     sprite: Clothing/Back/Backpacks/backpack.rsi
+#     state: icon
