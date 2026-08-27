@@ -8,6 +8,8 @@
   components:
   - type: Item
     size: Small
+    shape:
+    - 0,0,1,1
   - type: Clothing
     slots: [belt]
   - type: Storage
@@ -20,6 +22,9 @@
     maxItemSize: Small
   - type: Sprite  # idk sure whatever
     sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet.rsi
+    storedSprite:
+      state: icon
+      sprite: Objects/Fun/Instruments/microphone.rsi
     state: icon
   - type: UseDelay
     delay: 0.5
