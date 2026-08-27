@@ -24,16 +24,32 @@
     sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet.rsi
     storedSprite:
       state: icon
-      sprite: Objects/Fun/Instruments/microphone.rsi
+      sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet.rsi
     state: icon
+  - type: ItemMapper
+    sprite: &WalletOverlay _Carpmosia/Clothing/Wallet/Wallets/wallet_overlays.rsi
+    mapLayers:
+      paper:
+        whitelist:
+          components:
+          - Paper
+      ticket:
+        whitelist:
+          tags:
+          - SalvageTicket
+      speso:
+        whitelist:
+          components:
+          - Cash
   - type: UseDelay
     delay: 0.5
+  - type: Appearance
 
 
 # - type: entity  # i cant be bothered
 #   parent: Wallet
-#   id: WalletPurse
-#   name: purse
+#   id: SyndiWallet
+#   name: syndiwallet
 #   components:
 #   - type: Sprite
 #     sprite: Clothing/Back/Backpacks/backpack.rsi
