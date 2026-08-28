@@ -20,7 +20,7 @@
       - Currency  # salvage tickets, speso
       - Paper  # idk you can probaly shove a sheet of paper or note in there??
     maxItemSize: Small
-  - type: Sprite  # idk sure whatever
+  - type: Sprite
     sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet.rsi
     storedSprite:
       state: icon
@@ -29,6 +29,10 @@
   - type: ItemMapper
     sprite: &WalletOverlay _Carpmosia/Clothing/Wallet/Wallets/wallet_overlays.rsi
     mapLayers:
+      speso:
+        whitelist:
+          components:
+          - Cash
       paper:
         whitelist:
           components:
@@ -37,20 +41,46 @@
         whitelist:
           tags:
           - SalvageTicket
-      speso:
-        whitelist:
-          components:
-          - Cash
   - type: UseDelay
     delay: 0.5
   - type: Appearance
+  - type: Tag
+    tags:
+    - Wallet
 
+- type: entity
+  parent: Wallet
+  id: WalletCaptain
+  name: Captain's Wallet
+  components:
+  - type: Sprite
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-captain.rsi
+    state: icon
 
-# - type: entity  # i cant be bothered
-#   parent: Wallet
-#   id: SyndiWallet
-#   name: syndiwallet
-#   components:
-#   - type: Sprite
-#     sprite: Clothing/Back/Backpacks/backpack.rsi
-#     state: icon
+- type: entity
+  parent: Wallet
+  id: WalletCentComm
+  name: CentComm Wallet
+  components:
+  - type: Sprite
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-centcomm.rsi
+    state: icon
+
+- type: entity
+  parent: Wallet
+  id: WalletSyndicate
+  name: SyndieWallet
+  components:
+  - type: Sprite
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-syndicate.rsi
+    state: icon
+
+- type: entity
+  parent: Wallet
+  id: WalletClown
+  name: Honk Wallet
+  description: Because you can't buy things with happiness.
+  components:
+  - type: Sprite
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-clown.rsi
+    state: icon

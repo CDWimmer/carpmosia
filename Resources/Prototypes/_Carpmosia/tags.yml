@@ -9,3 +9,6 @@
 
 - type: Tag
   id: SalvageTicket # salvage tickets dont have unique identifying component so lets give em one
+
+- type: Tag
+  id: Wallet
