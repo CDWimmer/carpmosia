@@ -17,7 +17,9 @@
         icon:
           sprite: Clothing/Eyes/Hud/sec.rsi
           state: icon
-        doAfter: 3
+      - material: Cable
+        amount: 5
+        doAfter: 5
   - node: done
     entity: ClothingEyesGlassesSecurityPrescription
 
@@ -40,7 +42,9 @@
         icon:
           sprite: Clothing/Eyes/Hud/command.rsi
           state: icon
-        doAfter: 3
+      - material: Cable
+        amount: 5
+        doAfter: 5
   - node: done
     entity: ClothingEyesGlassesMedicalPrescription
 
@@ -63,7 +67,9 @@
         icon:
           sprite: Clothing/Eyes/Hud/command.rsi
           state: icon
-        doAfter: 3
+      - material: Cable
+        amount: 5
+        doAfter: 5
   - node: done
     entity: ClothingEyesGlassesCommandPrescription
 
@@ -86,7 +92,9 @@
         icon:
           sprite: Clothing/Eyes/Hud/medsec.rsi
           state: icon
-        doAfter: 3
+      - material: Cable
+        amount: 5
+        doAfter: 5
   - node: done
     entity: ClothingEyesGlassesMedSecPrescription
 
@@ -109,7 +117,9 @@
         icon:
           sprite: Clothing/Eyes/Glasses/science.rsi
           state: icon
-        doAfter: 3
+      - material: Cable
+        amount: 5
+        doAfter: 5
   - node: done
     entity: ClothingEyesGlassesChemicalPrescription
 
@@ -133,5 +143,8 @@
           sprite: Clothing/Eyes/Glasses/meson.rsi
           state: icon
         doAfter: 3
+      - material: Cable
+        amount: 5
+        doAfter: 5
   - node: done
     entity: ClothingEyesGlassesMesonPrescription
