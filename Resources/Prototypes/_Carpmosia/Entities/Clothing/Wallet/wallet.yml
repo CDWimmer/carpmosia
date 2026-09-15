@@ -1,33 +1,99 @@
 
+# for pre-filled wallets
+- type: entity
+  parent: SpaceCash
+  id: SpaceCash250
+  suffix: 250
+  categories: [ HideSpawnMenu ]  # no clutter
+  components:
+  - type: Icon
+    sprite: Objects/Economy/cash.rsi
+    state: cash_100
+  - type: Stack
+    count: 250
+
+- type: entityTable
+  id: WalletStandardFillTable
+  table: !type:AllSelector
+    children:
+    - !type:GroupSelector
+      rolls: !type:RangeNumberSelector
+        range: 1, 3
+      children:
+      - id: SpaceCash10
+        weight: 0.05
+      - id: SpaceCash100
+        weight: 0.3
+      - id: SpaceCash250
+        weight: 0.3
+      - id: SpaceCash500
+        weight: 0.20
+      - id: SpaceCash1000
+        weight: 0.15
+
+- type: entityTable
+  id: WalletRichFillTable
+  table: !type:AllSelector
+    children:
+    - !type:GroupSelector
+      rolls: !type:RangeNumberSelector
+        range: 1, 3
+      children:
+      - id: SpaceCash100
+        weight: 0.1
+      - id: SpaceCash250
+        weight: 0.35
+      - id: SpaceCash500
+        weight: 0.3
+      - id: SpaceCash1000
+        weight: 0.2
+      - id: SpaceCash2500
+        weight: 0.05
+
 # base
 - type: entity
-  parent: [Clothing, BaseStorageItem]
+  parent: [BaseStorageItem, BaseBagOpenClose]
   id: Wallet
   name: wallet
   description: Never leave the station without it!
   components:
   - type: Item
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet.rsi
     size: Small
     shape:
     - 0,0,1,1
   - type: Clothing
-    slots: [belt]
+    slots: [belt, wallet]
   - type: Storage
     grid:
     - 0,0,2,1
     whitelist:
       components:
-      - Currency  # salvage tickets, speso
+      - Currency  # salvage tickets, spesos, telecrystals
       - Paper  # idk you can probaly shove a sheet of paper or note in there??
     maxItemSize: Small
   - type: Sprite
     sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet.rsi
-    storedSprite:
-      state: icon
-      sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet.rsi
-    state: icon
+    layers:
+    - state: open
+      map: ["openLayer"]
+    - state: speso
+      map: ["speso"]
+      sprite: &WalletOverlay _Carpmosia/Clothing/Wallet/Wallets/wallet_overlays.rsi
+      visible: false
+    - state: paper
+      map: ["paper"]
+      sprite: *WalletOverlay
+      visible: false
+    - state: ticket
+      map: ["ticket"]
+      visible: false
+      sprite: *WalletOverlay
+    - state: closed
+      map: ["closeLayer"]
+
   - type: ItemMapper
-    sprite: &WalletOverlay _Carpmosia/Clothing/Wallet/Wallets/wallet_overlays.rsi
+    sprite: *WalletOverlay
     mapLayers:
       speso:
         whitelist:
@@ -55,7 +121,7 @@
   components:
   - type: Sprite
     sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-captain.rsi
-    state: icon
+    state: closed
 
 - type: entity
   parent: Wallet
@@ -64,7 +130,7 @@
   components:
   - type: Sprite
     sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-centcomm.rsi
-    state: icon
+    state: closed
 
 - type: entity
   parent: Wallet
@@ -73,7 +139,7 @@
   components:
   - type: Sprite
     sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-syndicate.rsi
-    state: icon
+    state: closed
 
 - type: entity
   parent: Wallet
@@ -83,4 +149,69 @@
   components:
   - type: Sprite
     sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-clown.rsi
-    state: icon
+    state: closed
+
+# Filed wallets:
+
+# Base
+- type: entity
+  parent: Wallet
+  id: WalletFilled
+  suffix: Filled, Standard
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        tableId: WalletStandardFillTable
+
+- type: entity
+  parent: Wallet
+  id: WalletFilledRich
+  suffix: Filled, Rich
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        tableId: WalletRichFillTable
+
+# Captain
+- type: entity
+  parent: WalletCaptain
+  id: WalletCaptainFilled
+  suffix: Filled
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        tableId: WalletRichFillTable
+
+# CentComm
+- type: entity
+  parent: WalletCentComm
+  id: WalletCentCommFilled
+  suffix: Filled, Rich
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        tableId: WalletRichFillTable
+
+- type: entity
+  parent: WalletSyndicate
+  id: WalletSyndicateFilled
+  suffix: Filled, Rich
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        tableId: WalletRichFillTable
+
+- type: entity
+  parent: WalletClown
+  id: WalletClownFilled
+  suffix: Filled, Rich
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:NestedSelector
+        tableId: WalletRichFillTable
