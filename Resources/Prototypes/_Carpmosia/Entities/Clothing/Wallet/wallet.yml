@@ -14,45 +14,66 @@
 
 - type: entityTable
   id: WalletStandardFillTable
-  table: !type:AllSelector
-    children:
-    - !type:GroupSelector
-      rolls: !type:RangeNumberSelector
-        range: 1, 3
-      children:
-      - id: SpaceCash10
-        weight: 0.05
-      - id: SpaceCash100
-        weight: 0.3
-      - id: SpaceCash250
-        weight: 0.3
-      - id: SpaceCash500
-        weight: 0.20
-      - id: SpaceCash1000
-        weight: 0.15
+  table: !type:GroupSelector
+    rolls: 1, 3
+    children: # EV = 1066.5
+    - id: SpaceCash10
+      weight: 5
+    - id: SpaceCash100
+      weight: 30
+    - id: SpaceCash250
+      weight: 30
+    - id: SpaceCash500
+      weight: 20
+    - id: SpaceCash1000
+      weight: 15
 
 - type: entityTable
   id: WalletRichFillTable
+  table: !type:GroupSelector
+    rolls: 1, 3
+    children: # EV = 1717.5
+    - id: SpaceCash100
+      weight: 10
+    - id: SpaceCash250
+      weight: 35
+    - id: SpaceCash500
+      weight: 30
+    - id: SpaceCash1000
+      weight: 20
+    - id: SpaceCash2500
+      weight: 5
+
+- type: entityTable
+  id: WalletSyndicateTelecrystalFillTable
   table: !type:AllSelector
     children:
-    - !type:GroupSelector
-      rolls: !type:RangeNumberSelector
-        range: 1, 3
-      children:
-      - id: SpaceCash100
-        weight: 0.1
-      - id: SpaceCash250
-        weight: 0.35
-      - id: SpaceCash500
-        weight: 0.3
-      - id: SpaceCash1000
-        weight: 0.2
-      - id: SpaceCash2500
-        weight: 0.05
+      - !type:GroupSelector
+        rolls: 1, 2
+        children:
+        - id: Telecrystal1
+          weight: 30
+        - id: Telecrystal5
+          weight: 40
+        - id: Telecrystal10
+          weight: 40
+      - !type:GroupSelector
+        rolls: 1, 2
+        children:
+        - id: SpaceCash10
+          weight: 5
+        - id: SpaceCash100
+          weight: 30
+        - id: SpaceCash250
+          weight: 30
+        - id: SpaceCash500
+          weight: 20
+        - id: SpaceCash1000
+          weight: 15
 
 # base
 - type: entity
-  parent: [BaseStorageItem, BaseBagOpenClose]
+  parent: [ Clothing, BaseStorageItem ]
   id: Wallet
   name: wallet
   description: Never leave the station without it!
@@ -70,8 +91,21 @@
     whitelist:
       components:
       - Currency  # salvage tickets, spesos, telecrystals
-      - Paper  # idk you can probaly shove a sheet of paper or note in there??
+      - Paper  # idk you can probably shove a sheet of paper or note in there??
     maxItemSize: Small
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.SharedBagOpenVisuals.BagState:  # stolen from BaseBagOpenClose, not parented as one day intend to do fancier things with the overlay sprites
+        closeLayer:
+          Open: { visible: false }
+          Closed: { visible: true }
+        openLayer:
+          Open: { visible: true }
+          Closed: { visible: false }
+        # speso:  # one day...
+        #   Open: { visible: true }
+        #   Closed: { visible: false }
   - type: Sprite
     sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet.rsi
     layers:
@@ -89,9 +123,12 @@
       map: ["ticket"]
       visible: false
       sprite: *WalletOverlay
-    - state: closed
+    - state: telecrystal
+      map: ["telecrystal"]
+      visible: false
+      sprite: *WalletOverlay
+    - state: closed  # render closed state last so it hides the overlay sprites under it.
       map: ["closeLayer"]
-
   - type: ItemMapper
     sprite: *WalletOverlay
     mapLayers:
@@ -107,9 +144,12 @@
         whitelist:
           tags:
           - SalvageTicket
+      telecrystal:
+        whitelist:
+          tags:
+          - Telecrystal
   - type: UseDelay
     delay: 0.5
-  - type: Appearance
   - type: Tag
     tags:
     - Wallet
@@ -145,13 +185,13 @@
   parent: Wallet
   id: WalletClown
   name: Honk Wallet
-  description: Because you can't buy things with happiness.
+  description: Because even clowns can't buy things with happiness.
   components:
   - type: Sprite
     sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-clown.rsi
     state: closed
 
-# Filed wallets:
+# Filled wallets:
 
 # Base
 - type: entity
@@ -176,42 +216,46 @@
 
 # Captain
 - type: entity
-  parent: WalletCaptain
+  parent: [WalletCaptain, WalletFilled]
   id: WalletCaptainFilled
-  suffix: Filled
-  components:
-  - type: EntityTableContainerFill
-    containers:
-      storagebase: !type:NestedSelector
-        tableId: WalletRichFillTable
+
+- type: entity
+  parent: [WalletCaptain, WalletFilledRich]
+  id: WalletCaptainFilledRich
 
 # CentComm
 - type: entity
-  parent: WalletCentComm
+  parent: [WalletCentComm, WalletFilled]
   id: WalletCentCommFilled
-  suffix: Filled, Rich
-  components:
-  - type: EntityTableContainerFill
-    containers:
-      storagebase: !type:NestedSelector
-        tableId: WalletRichFillTable
 
 - type: entity
-  parent: WalletSyndicate
+  parent: [WalletCentComm, WalletFilledRich]
+  id: WalletCentCommFilledRich
+
+# Syndicate
+- type: entity
+  parent: [WalletSyndicate, WalletFilled]
   id: WalletSyndicateFilled
-  suffix: Filled, Rich
-  components:
-  - type: EntityTableContainerFill
-    containers:
-      storagebase: !type:NestedSelector
-        tableId: WalletRichFillTable
 
 - type: entity
-  parent: WalletClown
-  id: WalletClownFilled
-  suffix: Filled, Rich
+  parent: [WalletSyndicate, WalletFilledRich]
+  id: WalletSyndicateFilledRich
+
+- type: entity
+  parent: [WalletSyndicate]
+  id: WalletSyndicateFilledTC
+  suffix: Filled, random TC
   components:
   - type: EntityTableContainerFill
     containers:
       storagebase: !type:NestedSelector
-        tableId: WalletRichFillTable
+        tableId: WalletSyndicateTelecrystalFillTable
+
+# Clown
+- type: entity
+  parent: [WalletClown, WalletFilled]
+  id: WalletClownFilledRich
+
+- type: entity
+  parent: [WalletClown, WalletFilledRich]
+  id: WalletClownFilled
