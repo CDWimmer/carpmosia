@@ -84,7 +84,7 @@
     shape:
     - 0,0,1,1
   - type: Clothing
-    slots: [belt]  # add wallet if/when have wallet slot
+    slots: [belt, wallet]
   - type: Storage
     grid:
     - 0,0,1,1

@@ -23,11 +23,10 @@ public enum SlotFlags
     GLOVES = 1 << 10,
     IDCARD = 1 << 11,
     POCKET = 1 << 12,
-    //  Carpmosia-start - legs aren't used, reduce reuse recycle for wallet slot
-    // LEGS = 1 << 13,
-    WALLET = 1 << 13,
+    LEGS = 1 << 13,
     FEET = 1 << 14,
     SUITSTORAGE = 1 << 15,
+    WALLET = 1 << 16,  // Carpmosia-edit - Wallets
     All = ~NONE,
 
     WITHOUT_POCKET = All & ~POCKET
