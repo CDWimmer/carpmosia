@@ -1,6 +1,6 @@
 - type: entity
-  id: CigPackCarp
   parent: CigPackBase
+  id: CigPackCarp
   name: Carp Sticks
   description: Like carp sashimi, but with 100% more tumors
   components:
