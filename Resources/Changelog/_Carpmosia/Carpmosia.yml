@@ -2733,4 +2733,12 @@
   id: 400
   time: '2026-08-31T10:17:54.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/605
+- author: wavesneglected
+  changes:
+  - message: Changed the handcuff delay to be 7 seconds instead of the previous 3
+      seconds.
+    type: Tweak
+  id: 401
+  time: '2026-09-27T12:17:56.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/626
 Order: -1
