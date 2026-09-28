@@ -207,13 +207,15 @@
   - type: Contraband
     allowedJobs: [ CBURN ]
 
-- type: entity
-  id: BaseDeathSquadContraband
-  parent: BaseRestrictedContraband
-  abstract: true
-  components:
-  - type: Contraband
-    allowedJobs: [ DeathSquad ]
+# Carpmosia-start - Remove Deathsquad
+# - type: entity
+#   id: BaseDeathSquadContraband
+#   parent: BaseRestrictedContraband
+#   abstract: true
+#   components:
+#   - type: Contraband
+#     allowedJobs: [ DeathSquad ]
+# Carpmosia-end - Remove Deathsquad
 
 - type: entity
   id: BaseSecurityBartenderContraband

@@ -295,7 +295,7 @@
 
 - type: entity
   name: pulse pistol
-  parent: [BaseWeaponBatterySmall, BaseDeathSquadContraband]
+  parent: [BaseWeaponBatterySmall, BaseTaskForceContraband] # Carpmosia-edit - Remove Deathsquad
   id: WeaponPulsePistol
   description: A state-of-the-art energy pistol favoured as a sidearm by elite Nanotrasen operatives.
   components:
@@ -335,7 +335,7 @@
 
 - type: entity
   name: pulse carbine
-  parent: [BaseWeaponBattery, BaseGunWieldable, BaseDeathSquadContraband]
+  parent: [BaseWeaponBattery, BaseGunWieldable, BaseTaskForceContraband] # Carpmosia-edit - Remove Deathsquad
   id: WeaponPulseCarbine
   description: A high-tech energy carbine favoured by elite Nanotrasen operatives.
   components:
@@ -373,7 +373,7 @@
 
 - type: entity
   name: pulse rifle
-  parent: [BaseWeaponBattery, BaseGunWieldable, BaseDeathSquadContraband]
+  parent: [BaseWeaponBattery, BaseGunWieldable, BaseTaskForceContraband] # Carpmosia-edit - Remove Deathsquad
   id: WeaponPulseRifle
   description: A weapon almost as infamous as its users.
   components:
@@ -537,7 +537,7 @@
   - type: StaticPrice
     price: 100
   - type: Gun
-    fireRate: 3 # Carpmosia-edit - disabler nerf
+    fireRate: 2
     projectileSpeed: 35 # any higher and this causes issues in lag
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/taser2.ogg
@@ -546,7 +546,7 @@
     startingCharge: 800 # Charges in a 20W recharger at 40 seconds
   - type: BatteryAmmoProvider
     proto: BulletDisablerPractice
-    fireCost: 100 # Carpmosia-edit - disabler nerf
+    fireCost: 25 # 32 shots, 2 stamcrits, +3 miss buffer per stamcrit (256 stam damage total)
   - type: Tag
     tags:
     - Taser
@@ -574,8 +574,7 @@
       - suitStorage
       - Belt
   - type: BatteryAmmoProvider
-    proto: BulletDisablerSmg # Carpmosia-edit - disabler nerf
-    fireCost: 100 # Carpmosia-edit - disabler nerf
+    proto: BulletDisabler
   - type: GuideHelp
     guides:
     - Security
