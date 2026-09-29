@@ -32,7 +32,7 @@ public sealed partial class ChatSanitizationManager : IChatSanitizationManager
         Entry("B)", "chatsan-smiles-smugly"),
         Entry("B-)", "chatsan-smiles-smugly"),
         Entry(":c", "chatsan-frowns"),
-        Entry(":c", "chatsan-smiles"),
+        Entry("c:", "chatsan-smiles"),
         Entry(":))", "chatsan-smiles-widely"),
         Entry(":-))", "chatsan-smiles-widely"),
         // Carpmosia-end - More smilies
