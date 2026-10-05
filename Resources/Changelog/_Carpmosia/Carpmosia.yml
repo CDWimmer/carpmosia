@@ -2748,4 +2748,12 @@
   id: 402
   time: '2026-10-05T16:10:35.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/630
+- author: Atakku
+  changes:
+  - message: All emergency and ERT shuttles as well as the salvage's reclaimer got
+      cleaned up
+    type: Tweak
+  id: 403
+  time: '2026-10-05T18:23:03.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/613
 Order: -1
