@@ -9,7 +9,7 @@
   - type: Currency
     price:
       SpaceCash: 1
-  # Carpmosia-end - cash is currency
+  # Carpmosia-end - Space cash
   - type: Item
     shape:
     - 0,0,1,0
