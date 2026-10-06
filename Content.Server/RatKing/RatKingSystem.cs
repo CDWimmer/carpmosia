@@ -6,10 +6,8 @@ using Content.Server.NPC.HTN;
 using Content.Server.NPC.Systems;
 using Content.Server.Popups;
 using Content.Shared.Atmos;
-using Content.Shared.Damage.Components; // Carpmosia-edit - Remove and replace Domain
 using Content.Shared.Damage.Systems; // Carpmosia-edit - Remove and replace Domain
 using Content.Shared.Dataset;
-using Content.Shared.FixedPoint; // Carpmosia-edit - Remove and replace Domain
 using Content.Shared.Gibbing; // Carpmosia-edit - Remove and replace Domain
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
@@ -35,12 +33,8 @@ namespace Content.Server.RatKing
         [Dependency] private GibbingSystem _gibbingSystem = default!;
         // Carpmosia-end - Remove and replace Domain
         [Dependency] private HTNSystem _htn = default!;
-<<<<<<< HEAD
-        [Dependency] private HungerSystem _hunger = default!;
-        [Dependency] private IRobustRandom _random = default!; // Carpmosia-edit - Remove and replace Domain
-=======
         [Dependency] private SatiationSystem _satiation = default!;
->>>>>>> merge
+        [Dependency] private IRobustRandom _random = default!; // Carpmosia-edit - Remove and replace Domain
         [Dependency] private NPCSystem _npc = default!;
         [Dependency] private PopupSystem _popup = default!;
 
