@@ -19,3 +19,7 @@
 - type: Tag
   id: GlassesPrescription # prescription goggles/HUDs recipes
 
+  id: HudDiagnostic # Diagnostics goggles recipe :3
+
+- type: Tag
+  id: SalvageTicket # salvage tickets dont have unique identifying component so lets give em one
