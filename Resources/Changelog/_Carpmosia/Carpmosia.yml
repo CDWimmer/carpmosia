@@ -2788,4 +2788,13 @@
   id: 407
   time: '2026-10-06T07:20:57.0000000+00:00'
   url: https://github.com/carpmosia/carpmosia/pull/627
+- author: CDWimmer
+  changes:
+  - message: Carp Cigs
+    type: Add
+  - message: Resprited Nomad cigarette packet+carton
+    type: Tweak
+  id: 408
+  time: '2026-10-06T07:59:58.0000000+00:00'
+  url: https://github.com/carpmosia/carpmosia/pull/625
 Order: -1
