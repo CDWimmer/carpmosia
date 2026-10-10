@@ -12,7 +12,7 @@
   name: steal-target-groups-handheld-crew-monitor
   sprite:
     sprite: Objects/Specific/Medical/handheldcrewmonitor.rsi
-    state: scanner
+    state: icon
 
 - type: stealTargetGroup
   id: ClothingOuterHardsuitRd
@@ -160,8 +160,8 @@
   id: LAMP
   name: steal-target-groups-lamps
   sprite:
-    sprite: Objects/Tools/lantern.rsi
-    state: lantern
+    sprite: _Carpmosia/Interface/Misc/antag_obj.rsi # Carpmosia - lamp steal obj resprite
+    state: LAMP
 
 - type: stealTargetGroup
   id: ClothingEyesHuds

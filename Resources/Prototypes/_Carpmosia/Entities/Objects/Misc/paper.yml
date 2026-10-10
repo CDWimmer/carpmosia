@@ -1,0 +1,101 @@
+- type: entity
+  parent: Paper
+  id: !type:CreateVariants
+    values:
+      - PaperColorRed
+      - PaperColorOrange
+      - PaperColorYellow
+      - PaperColorGreen
+      - PaperColorTeal
+      - PaperColorBlue
+      - PaperColorIndigo
+      - PaperColorPurple
+      - PaperColorPink
+  suffix: &suffix !type:CreateVariants
+    values:
+      - red
+      - orange
+      - yellow
+      - green
+      - teal
+      - blue
+      - indigo
+      - purple
+      - pink
+  description: !type:CreateVariants
+    values:
+      - A piece of red paper.
+      - A piece of orange paper.
+      - A piece of yellow paper.
+      - A piece of green paper.
+      - A piece of teal paper.
+      - A piece of blue paper.
+      - A piece of indigo paper.
+      - A piece of purple paper.
+      - A piece of pink paper.
+  components:
+  - type: Sprite
+    layers:
+    - state: paper
+      color: &color !type:CreateVariants
+        values:
+          - "#FFCDD2"
+          - "#FFE0B2"
+          - "#FFF9C4"
+          - "#C8E6C9"
+          - "#B2DFDB"
+          - "#BBDEFB"
+          - "#C5CAE9"
+          - "#E1BEE7"
+          - "#F8BBD0"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: *color
+      visible: false
+    - state: paper_stamp-generic
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: *color
+    contentImageModulate: *color
+
+- type: entity
+  parent: PaperOffice
+  id: !type:CreateVariants
+    values:
+      - PaperOfficeColorRed
+      - PaperOfficeColorOrange
+      - PaperOfficeColorYellow
+      - PaperOfficeColorGreen
+      - PaperOfficeColorTeal
+      - PaperOfficeColorBlue
+      - PaperOfficeColorIndigo
+      - PaperOfficeColorPurple
+      - PaperOfficeColorPink
+  suffix: *suffix
+  description: !type:CreateVariants
+    values:
+      - A piece of red office paper.
+      - A piece of orange office paper.
+      - A piece of yellow office paper.
+      - A piece of green office paper.
+      - A piece of teal office paper.
+      - A piece of blue office paper.
+      - A piece of indigo office paper.
+      - A piece of purple office paper.
+      - A piece of pink office paper.
+  components:
+  - type: Sprite
+    layers:
+    - state: paper
+      color: *color
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: *color
+      visible: false
+    - state: paper_stamp-generic
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: *color
+    contentImageModulate: *color

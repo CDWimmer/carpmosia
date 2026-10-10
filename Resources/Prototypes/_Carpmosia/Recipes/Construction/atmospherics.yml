@@ -1,0 +1,21 @@
+# region Binary
+- type: construction
+  parent: BaseGasBinary
+  id: !type:CreateVariants
+    values: [ GasVentPumpInline, GasVentPumpInlineAlt1, GasVentPumpInlineAlt2, GasVentPumpInlineAlt3, GasVentPumpInlineAlt4 ]
+  hide: !type:CreateVariants
+    values: [ false, true, true, true, true ]
+  graph: !type:CreateVariants
+    values: [ GasBinary, GasBinaryAlt1, GasBinaryAlt2, GasBinaryAlt3, GasBinaryAlt4 ] # Carpmosia-edit - 5 pipe layers
+  targetNode: ventpumpInline
+
+- type: construction
+  parent: BaseGasBinary
+  id: !type:CreateVariants
+    values: [ GasVentScrubberInline, GasVentScrubberInlineAlt1, GasVentScrubberInlineAlt2, GasVentScrubberInlineAlt3, GasVentScrubberInlineAlt4 ]
+  hide: !type:CreateVariants
+    values: [ false, true, true, true, true ]
+  graph: !type:CreateVariants
+    values: [ GasBinary, GasBinaryAlt1, GasBinaryAlt2, GasBinaryAlt3, GasBinaryAlt4 ] # Carpmosia-edit - 5 pipe layers
+  targetNode: ventscrubberInline
+# endregion Binary

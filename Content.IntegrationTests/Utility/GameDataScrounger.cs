@@ -169,17 +169,15 @@ public static partial class GameDataScrounger
             // Take a directory off the stack.
             var dir = explorationStack.Pop();
 
-            if (ignoreList.Contains(dir))
-                continue; // It's all abstract anyway.
+            var ignoredDir = ignoreList.Contains(Path.GetFullPath(dir));
 
             explorationStack.AddRange(Directory.EnumerateDirectories(dir));
 
             foreach (var file in Directory.EnumerateFiles(dir, "*.yml"))
             {
-                if (ignoreList.Contains(file))
-                    continue; // It's all abstract anyway.
+                var ignored = ignoredDir || ignoreList.Contains(Path.GetFullPath(file));
 
-                foreach (var (kind, id) in IndexPrototypesIn(file))
+                foreach (var (kind, id) in IndexPrototypesIn(file, ignored))
                 {
                     // alternate universe where .net has rust's Entry api.
                     if (!_prototypeIndex.TryGetValue(kind, out var list))
@@ -204,8 +202,9 @@ public static partial class GameDataScrounger
     ///     yielding all (type, id) pairs.
     /// </summary>
     /// <param name="file">The file to index.</param>
+    /// <param name="ignored">Whether or not the file is ignored. This treats the entire file as abstract.</param>
     /// <returns>An enumerator of all prototypes in the file, regardless of kind.</returns>
-    private static IEnumerable<(string type, string id)> IndexPrototypesIn(string file)
+    private static IEnumerable<(string type, string id)> IndexPrototypesIn(string file, bool ignored = false)
     {
         var stream = new YamlStream();
 
@@ -222,8 +221,13 @@ public static partial class GameDataScrounger
                 var entryMapping = (YamlMappingNode)entry;
 
                 var id = entryMapping[IdNode];
+
+                // TODO: Add handling for prototype variants
+                if (id is YamlMappingNode)
+                    continue;
+
                 var type = entryMapping[TypeNode];
-                var @abstract = false;
+                var @abstract = ignored;
                 if (entryMapping.TryGetNode("abstract", out YamlScalarNode? abstractNode))
                 {
                     // TODO: This technically will exclude prototypes that use the abstract field for their own stuff,
@@ -308,6 +312,77 @@ public static partial class GameDataScrounger
         }
     }
 
+    // Carpmosia-start - Data Scrounger Bruh Moment 45963
+    private static readonly string[] FuckThisShit =
+    {
+        "GasVentPumpAlt4",
+        "GasVentScrubberAlt3",
+        "GasVentPumpAlt2",
+        "GasPipeStraight",
+        "GasPipeBend",
+        "GasPipeTJunction",
+        "GasOutletInjector",
+        "GasPressurePump",
+        "GasPipeSensor",
+        "GasPipeStraightAlt4",
+        "GasPipeBendAlt4",
+        "GasPassiveVentAlt4",
+        "GasPressureRegulatorAlt4",
+        "GasPipeStraightAlt3",
+        "GasPipeBendAlt3",
+        "GasPipeTJunctionAlt3",
+        "GasPipeFourwayAlt3",
+        "GasPassiveVentAlt3",
+        "GasOutletInjectorAlt3",
+        "GasPressurePumpAlt3",
+        "GasPassiveGateAlt3",
+        "GasValveAlt3",
+        "GasPortAlt3",
+        "GasPipeSensorAlt3",
+        "GasVentScrubberInlineAlt3",
+        "GasFilterAlt3",
+        "GasFilterFlippedAlt3",
+        "GasPipeTJunctionAlt4",
+        "GasPipeFourwayAlt4",
+        "GasPressurePumpAlt4",
+        "GasValveAlt4",
+        "GasPortAlt4",
+        "GasPipeSensorAlt4",
+        "GasVentPumpInlineAlt4",
+        "GasFilterAlt4",
+        "GasFilterFlippedAlt4",
+        "GasMixer",
+        "GasMixerFlipped",
+        "GasPipeFourway",
+        "GasThermoMachineFreezerEnabled",
+        "GasPort",
+        "GasFilter",
+        "GasFilterFlipped",
+        "GasPipeStraightAlt1",
+        "GasPipeBendAlt1",
+        "GasPipeTJunctionAlt1",
+        "GasPipeFourwayAlt1",
+        "GasPressurePumpAlt1",
+        "GasVolumePumpAlt1",
+        "GasValveAlt1",
+        "GasPortAlt1",
+        "HeatExchangerAlt1",
+        "HeatExchangerBendAlt1",
+        "GasPipeSensorAlt1",
+        "GasPipeStraightAlt2",
+        "GasPipeBendAlt2",
+        "GasPipeTJunctionAlt2",
+        "GasPipeFourwayAlt2",
+        "GasPressurePumpAlt2",
+        "GasValveAlt2",
+        "GasPortAlt2",
+        "GasVolumePumpAlt2",
+        "HeatExchangerAlt2",
+        "HeatExchangerBendAlt2",
+        "GasPipeSensorAlt2",
+    };
+    // Carpmosia-end - Data Scrounger Bruh Moment 45963
+
     /// <summary>
     ///     Visits the given entity, potentially recursively in order to discover all of its components.
     /// </summary>
@@ -321,6 +396,10 @@ public static partial class GameDataScrounger
 
         foreach (var parent in entity.Parents)
         {
+            // Carpmosia-start - Data Scrounger Bruh Moment 45963
+            if (FuckThisShit.Contains(parent))
+                continue;
+            // Carpmosia-end - Data Scrounger Bruh Moment 45963
             var parentMeta = _entitiesMetaIndex![parent];
             VisitEntity(parentMeta, visitedEntities);
 
@@ -359,7 +438,7 @@ public static partial class GameDataScrounger
                     if (entry is not YamlScalarNode { Value: {} value })
                         throw new Exception($"An entry in {path} is not a valid YAML scalar/string literal. Entry: {entry}");
 
-                    ignores.Add(value);
+                    ignores.Add(Path.GetFullPath($"{resDir}{value}"));
                 }
             }
         }

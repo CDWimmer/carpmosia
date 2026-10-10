@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Client.UserInterface.Screens;
 using Content.Shared.CCVar;
 using Content.Shared.HUD;
@@ -42,7 +42,7 @@ public sealed partial class MiscTab : Control
 
         Control.AddOptionDropDown(CVars.InterfaceTheme, DropDownHudTheme, themeEntries);
         Control.AddOptionDropDown(CCVars.UILayout, DropDownHudLayout, layoutEntries);
-        Control.AddOptionCheckBox(CCVars.AltEmotesMenu, AltEmotesMenuCheckBox); // Carpmosia-edit - Alt emotes menu
+        Control.AddOptionCheckBox(CCVars.OldEmotesMenu, OldEmotesMenuCheckBox); // Carpmosia-edit - Alt emotes menu
 
         Control.AddOptionCheckBox(CVars.DiscordEnabled, DiscordRich);
         Control.AddOptionCheckBox(CCVars.ShowOocPatronColor, ShowOocPatronColor);

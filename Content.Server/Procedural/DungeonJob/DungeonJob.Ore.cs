@@ -1,3 +1,4 @@
+using System.Linq; // Carpmosia-edit - Kill dungeon logspam
 using System.Threading.Tasks;
 using Content.Shared.Procedural;
 using Content.Shared.Procedural.Components;
@@ -17,8 +18,10 @@ public sealed partial class DungeonJob
         OreDunGen gen,
         List<Dungeon> dungeons,
         HashSet<Vector2i> reservedTiles,
-        Random random)
+        IRobustRandom random)
     {
+        var remaining = new Dictionary<EntProtoId, int>(); // Carpmosia-edit - Kill dungeon logspam
+
         foreach (var dungeon in dungeons)
         {
             var emptyTiles = false;
@@ -35,7 +38,7 @@ public sealed partial class DungeonJob
                     continue;
 
                 // Check if it's a valid spawn, if so then use it.
-                var enumerator = _maps.GetAnchoredEntitiesEnumerator(_gridUid, _grid, node);
+                var enumerator = _maps.GetAnchoredEntities(_gridUid, _grid, node);
                 var found = false;
 
                 // We use existing entities as a mark to spawn in place
@@ -75,7 +78,7 @@ public sealed partial class DungeonJob
             if (_prototype.Resolve(gen.Entity, out var proto) &&
                 proto.Components.TryGetComponent("EntityRemap", out var comps))
             {
-                var remappingComp = (EntityRemapComponent) comps;
+                var remappingComp = (EntityRemapComponent)comps;
                 remapping = remappingComp.Mask;
             }
 
@@ -143,9 +146,20 @@ public sealed partial class DungeonJob
 
                 if (groupSize > 0)
                 {
-                    _sawmill.Warning($"Found remaining group size for ore veins of {gen.Replacement ?? "null"}!");
+                    // Carpmosia-start - Kill dungeon logspam
+                    var key = gen.Replacement ?? "null";
+                    if (!remaining.TryAdd(key, 1))
+                    {
+                        remaining[key]++;
+                    }
+                    // Carpmosia-start - Kill dungeon logspam
                 }
             }
         }
+
+        // Carpmosia-start - Kill dungeon logspam
+        if (remaining.Count > 0)
+            _sawmill.Warning($"Found remaining group size for groups, ore veins of {string.Join(", ", remaining.Select(kvp => $"{kvp.Key}: {kvp.Value}"))}!");
+        // Carpmosia-start - Kill dungeon logspam
     }
 }

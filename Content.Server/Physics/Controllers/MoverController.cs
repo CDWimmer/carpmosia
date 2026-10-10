@@ -3,7 +3,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
-using Content.Server.PID; // Carpmosia-edit - rotate shuttle along movement vector
+using Content.Server.PID; // Carpmosia-edit - Shuttle PID Steering
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
@@ -58,20 +58,6 @@ public sealed partial class MoverController : SharedMoverController
 
     private void OnEntityUnpaused(Entity<InputMoverComponent> ent, ref EntityUnpausedEvent args)
     {
-        UpdateMoverStatus((ent, ent.Comp));
-    }
-
-    protected override void OnInputMoverCanMoveUpdated(Entity<InputMoverComponent> ent, ref CanMoveUpdatedEvent args)
-    {
-        base.OnInputMoverCanMoveUpdated(ent, ref args);
-
-        if (!args.CanMove)
-        {
-            // Remove from active mover query when entity cannot move
-            RemCompDeferred<ActiveInputMoverComponent>(ent);
-            return;
-        }
-
         UpdateMoverStatus((ent, ent.Comp));
     }
 
@@ -230,7 +216,7 @@ public sealed partial class MoverController : SharedMoverController
         }
     }
 
-    public (Vector2 Strafe, float Rotation, float Brakes, float Align) GetPilotVelocityInput(PilotComponent component) // Carpmosia-edit - rotate shuttle along movement vector
+    public (Vector2 Strafe, float Rotation, float Brakes, float Align) GetPilotVelocityInput(PilotComponent component) // Carpmosia-edit - Shuttle PID Steering
     {
         if (!Timing.InSimulation)
         {
@@ -239,7 +225,7 @@ public sealed partial class MoverController : SharedMoverController
             // Physics system will have the correct time step anyways.
             ResetSubtick(component);
             ApplyTick(component, 1f);
-            return (component.CurTickStrafeMovement, component.CurTickRotationMovement, component.CurTickBraking, component.CurTickAligning); // Carpmosia-edit - rotate shuttle along movement vector
+            return (component.CurTickStrafeMovement, component.CurTickRotationMovement, component.CurTickBraking, component.CurTickAligning); // Carpmosia-edit - Shuttle PID Steering
         }
 
         float remainingFraction;
@@ -249,7 +235,7 @@ public sealed partial class MoverController : SharedMoverController
             component.CurTickStrafeMovement = Vector2.Zero;
             component.CurTickRotationMovement = 0f;
             component.CurTickBraking = 0f;
-            component.CurTickAligning = 0f; // Carpmosia-edit - rotate shuttle along movement vector
+            component.CurTickAligning = 0f; // Carpmosia-edit - Shuttle PID Steering
             remainingFraction = 1;
         }
         else
@@ -260,7 +246,7 @@ public sealed partial class MoverController : SharedMoverController
         ApplyTick(component, remainingFraction);
 
         // Logger.Info($"{curDir}{walk}{sprint}");
-        return (component.CurTickStrafeMovement, component.CurTickRotationMovement, component.CurTickBraking, component.CurTickAligning); // Carpmosia-edit - rotate shuttle along movement vector
+        return (component.CurTickStrafeMovement, component.CurTickRotationMovement, component.CurTickBraking, component.CurTickAligning); // Carpmosia-edit - Shuttle PID Steering
     }
 
     private void ResetSubtick(PilotComponent component)
@@ -270,7 +256,7 @@ public sealed partial class MoverController : SharedMoverController
         component.CurTickStrafeMovement = Vector2.Zero;
         component.CurTickRotationMovement = 0f;
         component.CurTickBraking = 0f;
-        component.CurTickAligning = 0f; // Carpmosia-edit - rotate shuttle along movement vector
+        component.CurTickAligning = 0f; // Carpmosia-edit - Shuttle PID Steering
         component.LastInputTick = Timing.CurTick;
         component.LastInputSubTick = 0;
     }
@@ -310,7 +296,7 @@ public sealed partial class MoverController : SharedMoverController
         var y = 0;
         var rot = 0;
         int brake;
-        var align = 0; // Carpmosia-edit - rotate shuttle along movement vector
+        var align = 0; // Carpmosia-edit - Shuttle PID Steering
 
         if ((component.HeldButtons & ShuttleButtons.StrafeLeft) != 0x0)
         {
@@ -359,7 +345,7 @@ public sealed partial class MoverController : SharedMoverController
 
         component.CurTickBraking += brake * fraction;
 
-        // Carpmosia-start - rotate shuttle along movement vector
+        // Carpmosia-start - Shuttle PID Steering
         if ((component.HeldButtons & ShuttleButtons.TowardVector) != 0x0)
         {
             align += 1;
@@ -371,7 +357,7 @@ public sealed partial class MoverController : SharedMoverController
         }
 
         component.CurTickAligning += align * fraction;
-        // Carpmosia-end - rotate shuttle along movement vector
+        // Carpmosia-end - Shuttle PID Steering
     }
 
     /// <summary>
@@ -454,15 +440,15 @@ public sealed partial class MoverController : SharedMoverController
             var linearInput = Vector2.Zero;
             var brakeInput = 0f;
             var angularInput = 0f;
-            var alignInput = 0f; // Carpmosia-edit - rotate shuttle along movement vector
+            var alignInput = 0f; // Carpmosia-edit - Shuttle PID Steering
             var linearCount = 0;
             var brakeCount = 0;
             var angularCount = 0;
-            var alignCount = 0; // Carpmosia-edit - rotate shuttle along movement vector
+            var alignCount = 0; // Carpmosia-edit - Shuttle PID Steering
 
             foreach (var (_, pilot, _, consoleXform) in pilots)
             {
-                var (strafe, rotation, brakes, align) = GetPilotVelocityInput(pilot); // Carpmosia-edit - rotate shuttle along movement vector
+                var (strafe, rotation, brakes, align) = GetPilotVelocityInput(pilot); // Carpmosia-edit - Shuttle PID Steering
 
                 if (brakes > 0f)
                 {
@@ -482,20 +468,20 @@ public sealed partial class MoverController : SharedMoverController
                     angularInput += rotation;
                     angularCount++;
                 }
-                // Carpmosia-start - rotate shuttle along movement vector
+                // Carpmosia-start - Shuttle PID Steering
                 if (align != 0f)
                 {
                     alignInput += align;
                     alignCount++;
                 }
-                // Carpmosia-end - rotate shuttle along movement vector
+                // Carpmosia-end - Shuttle PID Steering
             }
 
             // Don't slow down the shuttle if there's someone just looking at the console
             linearInput /= Math.Max(1, linearCount);
             angularInput /= Math.Max(1, angularCount);
             brakeInput /= Math.Max(1, brakeCount);
-            alignInput /= Math.Max(1, alignCount); // Carpmosia-edit - rotate shuttle along movement vector
+            alignInput /= Math.Max(1, alignCount); // Carpmosia-edit - Shuttle PID Steering
 
             // Handle shuttle movement
             if (brakeInput > 0f)
@@ -584,16 +570,16 @@ public sealed partial class MoverController : SharedMoverController
                     if (!torque.Equals(0f))
                     {
                         PhysicsSystem.ApplyTorque(shuttleUid, torque, body: body);
-                        _thruster.SetAngularThrust(shuttle, true);
+                        _thruster.SetAngularThrustVisualState(shuttle, true);
                     }
                 }
                 else
                 {
-                    _thruster.SetAngularThrust(shuttle, false);
+                    _thruster.SetAngularThrustVisualState(shuttle, false);
                 }
             }
 
-            /// Carpmosia-start - rotate shuttle along movement vector
+            // Carpmosia-start - Shuttle PID Steering
             if (!alignInput.Equals(0f) && !MathHelper.CloseTo(body.LinearVelocity.Length(), 0f, 0.01f))
             {
                 // Get velocity relative to the shuttle
@@ -601,8 +587,9 @@ public sealed partial class MoverController : SharedMoverController
                 var torqueMul = body.InvI * frameTime;
 
                 //find angle between current orientation and movement vector
-                var targetAngle = alignInput > 0f ?
-                    MathF.Acos(shuttleVelocity.Y / shuttleVelocity.Length()) : MathF.Acos(-shuttleVelocity.Y / shuttleVelocity.Length());
+                var targetAngle = alignInput > 0f
+                    ? MathF.Acos(shuttleVelocity.Y / shuttleVelocity.Length())
+                    : MathF.Acos(-shuttleVelocity.Y / shuttleVelocity.Length());
 
                 targetAngle *= MathF.Sign(shuttleVelocity.X);
 
@@ -628,11 +615,11 @@ public sealed partial class MoverController : SharedMoverController
                 if (!torque.Equals(0f))
                 {
                     PhysicsSystem.ApplyTorque(shuttleUid, torque, body: body);
-                    _thruster.SetAngularThrust(shuttle, true);
+                    _thruster.SetAngularThrustVisualState(shuttle, true);
                 }
                 else
                 {
-                    _thruster.SetAngularThrust(shuttle, false);
+                    _thruster.SetAngularThrustVisualState(shuttle, false);
                 }
 
             }
@@ -650,7 +637,7 @@ public sealed partial class MoverController : SharedMoverController
             {
                 shuttle.AccParams.PrevError = 0f;
             }
-            /// Carpmosia-end - rotate shuttle along movement vector
+            // Carpmosia-end - Shuttle PID Steering
 
             if (linearInput.Length().Equals(0f))
             {
@@ -743,7 +730,7 @@ public sealed partial class MoverController : SharedMoverController
                 PhysicsSystem.SetSleepingAllowed(shuttleUid, body, true);
 
                 if (brakeInput <= 0f)
-                    _thruster.SetAngularThrust(shuttle, false);
+                    _thruster.SetAngularThrustVisualState(shuttle, false);
             }
             else
             {
@@ -761,7 +748,7 @@ public sealed partial class MoverController : SharedMoverController
                 if (!torque.Equals(0f))
                 {
                     PhysicsSystem.ApplyTorque(shuttleUid, torque, body: body);
-                    _thruster.SetAngularThrust(shuttle, true);
+                    _thruster.SetAngularThrustVisualState(shuttle, true);
                 }
             }
         }

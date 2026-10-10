@@ -1,0 +1,296 @@
+- type: constructionGraph
+  id: !type:CreateVariants
+    values: [ GasBinary, GasBinaryAlt1, GasBinaryAlt2, GasBinaryAlt3, GasBinaryAlt4 ] # Carpmosia-edit - 5 pipe layers
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: pressurepump
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    - to: volumepump
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    - to: passivegate
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    - to: valve
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    - to: signalvalve
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    - to: pressureregulator
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    - to: port
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    - to: dualportventpump
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    - to: radiator
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    - to: bendradiator
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    # Carpmosia-start - Inline Atmos
+    - to: ventpumpInline
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+
+    - to: ventscrubberInline
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 1
+    # Carpmosia-end - Inline Atmos
+
+  - node: pressurepump
+    entity: !type:CreateVariants
+      values: [ GasPressurePump, GasPressurePumpAlt1, GasPressurePumpAlt2, GasPressurePumpAlt3, GasPressurePumpAlt4 ] # Carpmosia-edit - 5 pipe layers
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: volumepump
+    entity: !type:CreateVariants
+      values: [ GasVolumePump, GasVolumePumpAlt1, GasVolumePumpAlt2, GasVolumePumpAlt3, GasVolumePumpAlt4 ] # Carpmosia-edit - 5 pipe layers
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: passivegate
+    entity: !type:CreateVariants
+      values: [ GasPassiveGate, GasPassiveGateAlt1, GasPassiveGateAlt2, GasPassiveGateAlt3, GasPassiveGateAlt4 ] # Carpmosia-edit - 5 pipe layers
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: valve
+    entity: !type:CreateVariants
+      values: [ GasValve, GasValveAlt1, GasValveAlt2, GasValveAlt3, GasValveAlt4 ] # Carpmosia-edit - 5 pipe layers
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: signalvalve
+    entity: !type:CreateVariants
+      values: [ SignalControlledValve, SignalControlledValveAlt1, SignalControlledValveAlt2, SignalControlledValveAlt3, SignalControlledValveAlt4 ] # Carpmosia-edit - 5 pipe layers
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: pressureregulator
+    entity: !type:CreateVariants
+      values: [ GasPressureRegulator, GasPressureRegulatorAlt1, GasPressureRegulatorAlt2, GasPressureRegulatorAlt3, GasPressureRegulatorAlt4 ] # Carpmosia-edit - 5 pipe layers
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: port
+    entity: !type:CreateVariants
+      values: [ GasPort, GasPortAlt1, GasPortAlt2, GasPortAlt3, GasPortAlt4 ] # Carpmosia-edit - 5 pipe layers
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Welding
+        doAfter: 1
+
+  - node: dualportventpump
+    entity: !type:CreateVariants
+      values: [ GasDualPortVentPump, GasDualPortVentPumpAlt1, GasDualPortVentPumpAlt2, GasDualPortVentPumpAlt3, GasDualPortVentPumpAlt4 ] # Carpmosia-edit - 5 pipe layers
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Welding
+        doAfter: 1
+
+  - node: radiator
+    entity: !type:CreateVariants
+      values: [ HeatExchanger, HeatExchangerAlt1, HeatExchangerAlt2, HeatExchangerAlt3, HeatExchangerAlt4 ] # Carpmosia-edit - 5 pipe layers
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Welding
+        doAfter: 1
+
+  - node: bendradiator
+    entity: !type:CreateVariants
+      values: [ HeatExchangerBend, HeatExchangerBendAlt1, HeatExchangerBendAlt2, HeatExchangerBendAlt3, HeatExchangerBendAlt4 ] # Carpmosia-edit - 5 pipe layers
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Welding
+        doAfter: 1
+
+  # Carpmosia-start - Inline Atmos
+  - node: ventpumpInline
+    entity: !type:CreateVariants
+      values: [ GasVentPumpInline, GasVentPumpInlineAlt1, GasVentPumpInlineAlt2, GasVentPumpInlineAlt3, GasVentPumpInlineAlt4 ]
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Welding
+        doAfter: 1
+
+  - node: ventscrubberInline
+    entity: !type:CreateVariants
+      values: [ GasVentScrubberInline, GasVentScrubberInlineAlt1, GasVentScrubberInlineAlt2, GasVentScrubberInlineAlt3, GasVentScrubberInlineAlt4 ]
+    edges:
+    - to: start
+      conditions:
+      - !type:EntityAnchored
+        anchored: false
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Screwing
+        doAfter: 1
+      - tool: Welding
+        doAfter: 1
+  # Carpmosia-end - Inline Atmos

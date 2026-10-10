@@ -3,7 +3,7 @@ using Content.Shared.Paper;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Fax.Components;
 
@@ -122,19 +122,33 @@ public sealed partial class FaxMachineComponent : Component
     [ViewVariables]
     public float PrintingTime = 2.3f;
 
+    // Carpmosia-start - Colored paper
     /// <summary>
     ///     The prototype ID to use for faxed or copied entities if we can't get one from
     ///     the paper entity for whatever reason.
     /// </summary>
     [DataField]
-    public EntProtoId PrintPaperId = "Paper";
+    public Dictionary<PaperColor, (EntProtoId, EntProtoId)> PrintPaperId = new()
+    {
+        { PaperColor.White, ("Paper", "PaperOffice")},
+        { PaperColor.Red, ("PaperColorRed", "PaperOfficeColorRed")},
+        { PaperColor.Orange, ("PaperColorOrange", "PaperOfficeColorOrange")},
+        { PaperColor.Yellow, ("PaperColorYellow", "PaperOfficeColorYellow")},
+        { PaperColor.Green, ("PaperColorGreen", "PaperOfficeColorGreen")},
+        { PaperColor.Teal, ("PaperColorTeal", "PaperOfficeColorTeal")},
+        { PaperColor.Blue, ("PaperColorBlue", "PaperOfficeColorBlue")},
+        { PaperColor.Indigo, ("PaperColorIndigo", "PaperOfficeColorIndigo")},
+        { PaperColor.Purple, ("PaperColorPurple", "PaperOfficeColorPurple")},
+        { PaperColor.Pink, ("PaperColorPink", "PaperOfficeColorPink")}
+    };
 
-    /// <summary>
-    ///     The prototype ID to use for faxed or copied entities if we can't get one from
-    ///     the paper entity for whatever reason of the Office type.
-    /// </summary>
-    [DataField]
-    public EntProtoId PrintOfficePaperId = "PaperOffice";
+    // /// <summary>
+    // ///     The prototype ID to use for faxed or copied entities if we can't get one from
+    // ///     the paper entity for whatever reason of the Office type.
+    // /// </summary>
+    // [DataField]
+    // public EntProtoId PrintOfficePaperId = "PaperOffice";
+    // Carpmosia-end - Colored paper
 
     /// <summary>
     ///     If the fax machine should add a bit of text in the end of the fax that specifies from where and to where the fax is for
@@ -150,6 +164,7 @@ public sealed partial class FaxMachineComponent : Component
 }
 
 [DataDefinition]
+[Serializable, NetSerializable]
 public sealed partial class FaxPrintout
 {
     [DataField(required: true)]
@@ -161,13 +176,13 @@ public sealed partial class FaxPrintout
     [DataField(required: true)]
     public string Content { get; private set; } = default!;
 
-    [DataField(customTypeSerializer: typeof(PrototypeIdSerializer<EntityPrototype>), required: true)]
-    public string PrototypeId { get; private set; } = default!;
+    [DataField(required: true)]
+    public EntProtoId PrototypeId { get; private set; } = default!;
 
-    [DataField("stampState")]
+    [DataField]
     public string? StampState { get; private set; }
 
-    [DataField("stampedBy")]
+    [DataField]
     public List<StampDisplayInfo> StampedBy { get; private set; } = new();
 
     [DataField]
