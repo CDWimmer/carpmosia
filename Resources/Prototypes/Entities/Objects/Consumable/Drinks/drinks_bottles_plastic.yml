@@ -72,7 +72,7 @@
 - type: entity
   parent: [DrinkVisualsAllFilled, DrinkBottlePlasticSmallBaseFull]
   id: DrinkWaterBottleFull
-  suffix: Full # carpmosia-edit - Empty water bottle
+  suffix: Full # Carpmosia-edit - Empty water bottle
   name: water bottle
   description: Simple clean water of unknown origin. You think that maybe you dont want to know it.
   components:
