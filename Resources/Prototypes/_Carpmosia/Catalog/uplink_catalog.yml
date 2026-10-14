@@ -40,7 +40,7 @@
   id: UplinkWalletSyndicate
   name: uplink-syndicate-wallet-name
   description: uplink-syndicate-wallet-desc
-  icon: { sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-syndicate.rsi, state: closed }
+  icon: { sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet_syndicate.rsi, state: closed }
   productEntity: WalletSyndicate
   categories:
   - UplinkPointless
