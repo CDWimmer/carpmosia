@@ -260,7 +260,7 @@
 
 - type: entity
   parent: [WalletLeather, WalletFilledRich]
-  id: WalletLeatherFilled
+  id: WalletLeatherFilledRich
 
 # Captain
 - type: entity
