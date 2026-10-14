@@ -158,11 +158,21 @@
 
 - type: entity
   parent: Wallet
+  id: WalletLeather
+  name: Leather Wallet
+  description: Crafted from the finest 3D printed cows
+  components:
+  - type: Sprite
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet_leather.rsi
+    state: closed
+
+- type: entity
+  parent: Wallet
   id: WalletCaptain
   name: Captain's Wallet
   components:
   - type: Sprite
-    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-captain.rsi
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet_captain.rsi
     state: closed
 
 - type: entity
@@ -171,7 +181,7 @@
   name: CentComm Wallet
   components:
   - type: Sprite
-    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-centcomm.rsi
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet_centcomm.rsi
     state: closed
 
 - type: entity
@@ -180,7 +190,7 @@
   name: SyndieWallet
   components:
   - type: Sprite
-    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-syndicate.rsi
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet_syndicate.rsi
     state: closed
 
 - type: entity
@@ -190,7 +200,7 @@
   description: Because even clowns can't buy things with happiness.
   components:
   - type: Sprite
-    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet-clown.rsi
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet_clown.rsi
     state: closed
   - type: Storage
     storageOpenSound:
@@ -201,6 +211,24 @@
       collection: FootstepClown
       params:
         variation: 0.125
+
+- type: entity
+  parent: Wallet
+  id: WalletQuartermaster
+  name: Quartermaster Wallet
+  components:
+  - type: Sprite
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet_qm.rsi
+    state: closed
+
+- type: entity
+  parent: Wallet
+  id: WalletHoP
+  name: Quartermaster Wallet
+  components:
+  - type: Sprite
+    sprite: _Carpmosia/Clothing/Wallet/Wallets/wallet_qm.rsi
+    state: closed
 
 # Filled wallets:
 
@@ -224,6 +252,15 @@
     containers:
       storagebase: !type:NestedSelector
         tableId: WalletRichFillTable
+
+# Leather
+- type: entity
+  parent: [WalletLeather, WalletFilled]
+  id: WalletLeatherFilled
+
+  - type: entity
+  parent: [WalletLeather, WalletFilledRich]
+  id: WalletLeatherFilled
 
 # Captain
 - type: entity

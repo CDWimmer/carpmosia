@@ -9,6 +9,11 @@
 
 - type: latheRecipe
   parent: WalletRecipe
+  id: WalletLeatherRecipe
+  result: WalletLeather
+
+- type: latheRecipe
+  parent: WalletRecipe
   id: WalletCaptainRecipe
   result: WalletCaptain
 
@@ -26,3 +31,13 @@
   parent: WalletRecipe
   id: WalletClownRecipe
   result: WalletClown
+
+- type: latheRecipe
+  parent: WalletRecipe
+  id: WalletQuartermasterRecipe
+  result: WalletQuartermaster
+
+- type: latheRecipe
+  parent: WalletRecipe
+  id: WalletHoPRecipe
+  result: WalletHoP

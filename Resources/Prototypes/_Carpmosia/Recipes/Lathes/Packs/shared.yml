@@ -11,6 +11,8 @@
   - WalletCaptainRecipe
   - WalletClownRecipe
   - WalletCentCommRecipe
+  - WalletQuartermasterRecipe
+  # - WalletLeatherRecipe # Plan to make this a play-time limited item
 
 # requires emag:
 - type: latheRecipePack
