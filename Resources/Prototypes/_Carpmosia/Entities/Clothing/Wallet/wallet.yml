@@ -258,7 +258,7 @@
   parent: [WalletLeather, WalletFilled]
   id: WalletLeatherFilled
 
-  - type: entity
+- type: entity
   parent: [WalletLeather, WalletFilledRich]
   id: WalletLeatherFilled
 
