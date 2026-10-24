@@ -23,9 +23,6 @@
             "name": "open"
         },
         {
-            "name": "top"
-        },
-        {
             "name": "inhand-right",
             "directions": 4
         },
